@@ -1,62 +1,175 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{{ config('app.name') }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-<div class="welcome-wrapper">
 
-    <nav class="welcome-nav fade-in">
-        <a href="/" class="logo">
-            <div class="logo-mark">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
-                </svg>
+<body>
+
+    <!-- BLOBS -->
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- NAVBAR -->
+
+    <nav class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                ✦
             </div>
-            <span class="logo-text">{{ config('app.name') }}</span>
-        </a>
+
+            <div class="brand-name">
+                {{ config('app.name') }}
+            </div>
+
+        </div>
+
         @if (Route::has('login'))
-            <div style="display:flex;gap:0.75rem;align-items:center;">
+
+            <div style="display:flex;gap:1rem;align-items:center;">
+
                 @auth
-                    <a href="{{ url('/home') }}" class="btn-nav btn-nav-accent">Dashboard</a>
+
+                    <a href="{{ url('/home') }}" class="btn-secondary">
+                        Dashboard
+                    </a>
+
                 @else
-                    <a href="{{ route('login') }}" class="btn-nav">Iniciar sesión</a>
+
+                    <a href="{{ route('login') }}" class="btn-secondary">
+                        Login
+                    </a>
+
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn-nav btn-nav-accent">Registrarse</a>
+
+                        <a href="{{ route('register') }}" class="btn-primary">
+                            Crear cuenta
+                        </a>
+
                     @endif
+
                 @endauth
+
             </div>
+
         @endif
+
     </nav>
 
-    <section class="welcome-hero">
-        <div class="welcome-content">
-            <div class="welcome-badge fade-in">Siempre Activo</div>
-            <h1 class="fade-in-delay">
-                Gestiona tu<br>matrícula de forma<br><em>inteligente</em>
-            </h1>
-            <p class="fade-in-delay">
-                Accede a tu información académica, registrate en tus cursos
-                y mantén el control de tu historial en un solo lugar.
-            </p>
-            <div class="welcome-actions fade-in-delay-2">
-                @auth
-                    <a href="{{ url('/home') }}" class="btn-filled">Ir al Dashboard →</a>
-                @else
-                    <a href="{{ route('register') }}" class="btn-filled">Comenzar ahora →</a>
-                    <a href="{{ route('login') }}" class="btn-outline">Tengo una cuenta</a>
-                @endauth
-            </div>
-        </div>
-    </section>
+    <!-- HERO -->
 
-</div>
+    <main class="hero-layout">
+
+        <!-- LEFT -->
+
+        <section class="hero-content">
+
+            <div class="mini-badge">
+
+                <div class="mini-dot"></div>
+
+                Sistema inteligente activo
+
+            </div>
+
+            <h1 class="hero-title">
+
+                Evoluciona tu
+                experiencia
+                <span>académica.</span>
+
+            </h1>
+
+            <p class="hero-description">
+
+                Una nueva generación de plataformas universitarias.
+                Visualiza cursos, administra matrículas y controla
+                tu progreso desde una interfaz futurista impulsada
+                por tecnología moderna.
+
+            </p>
+
+            <div class="hero-buttons">
+
+                @auth
+
+                    <a href="{{ url('/home') }}"
+                       class="btn-primary">
+
+                        Entrar al sistema →
+
+                    </a>
+
+                @else
+
+                    <a href="{{ route('register') }}"
+                       class="btn-primary">
+
+                        Comenzar ahora →
+
+                    </a>
+
+                    <a href="{{ route('login') }}"
+                       class="btn-secondary">
+
+                        Ya tengo cuenta
+
+                    </a>
+
+                @endauth
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT -->
+
+        <section class="hero-visual">
+
+            <!-- ORB -->
+
+            <div class="orb"></div>
+
+            <!-- FLOATING CARDS -->
+
+            <div class="float-card card-1">
+
+                <div style="font-size:.8rem;color:#9ca3af;margin-bottom:.4rem;">
+                    ESTADO
+                </div>
+
+                <div style="font-size:1.1rem;font-weight:600;">
+                    Sistema operativo
+                </div>
+
+            </div>
+
+            <div class="float-card card-2">
+
+                <div style="font-size:.8rem;color:#9ca3af;margin-bottom:.4rem;">
+                    MATRÍCULAS
+                </div>
+
+                <div style="font-size:1.1rem;font-weight:600;">
+                    +1200 estudiantes
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </body>
+
 </html>
+
