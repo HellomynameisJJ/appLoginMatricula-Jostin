@@ -14,7 +14,11 @@ class Schedule extends Model
         return $this -> belongsTo(Course::class);
     }
 
-    public $fillable = [
+    public function registers(){
+        return $this -> hasMany(Register::class);
+    }
+
+    protected $fillable = [
         'course_id',
         'day_of_week',
         'start_time',

@@ -10,10 +10,12 @@ class Course extends Model
     /** @use HasFactory<\Database\Factories\CoursesFactory> */
     use HasFactory;
 
-    public function schedules(){
-        return $this -> hasMany(Schedule::class);
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
     }
-    public $fillable = [
+
+    protected $fillable = [
         "name_course",
         "sku",
         "credits",
