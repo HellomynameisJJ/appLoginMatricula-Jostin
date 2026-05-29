@@ -15,8 +15,8 @@ Route::get('/login/google', [App\Http\Controllers\Auth\LoginController::class, '
 Route::get('/login/google/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleGoogleCallBack']);
 
 // GitHub OAuth
-Route::get('/login/github', [App\Http\Controllers\Auth\LoginController::class, 'redirectToGithub'])->name('github.login');
-Route::get('/login/github/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleGithubCallback']);
+Route::get('login/github', [App\Http\Controllers\Auth\LoginController::class, 'redirectToGithub'])->name('github.login');
+Route::get('login/github/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleGithubCallBack']);
 
 // Dashboard protegido
 Route::middleware(['auth'])->get('/dashboard', function () {
