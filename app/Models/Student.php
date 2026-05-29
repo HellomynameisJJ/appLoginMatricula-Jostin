@@ -9,7 +9,13 @@ class Student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentsFactory> */
     use HasFactory;
-    public $fillable = [
+
+    public function registers()
+    {
+        return $this->hasMany(Register::class);
+    }
+    
+    protected $fillable = [
         "first_name",
         "last_name",
         "birth_date",

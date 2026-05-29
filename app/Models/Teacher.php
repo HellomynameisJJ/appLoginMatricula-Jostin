@@ -10,7 +10,12 @@ class Teacher extends Model
     /** @use HasFactory<\Database\Factories\TeacherFactory> */
     use HasFactory;
 
-    public $fillable = [
+    public function registers()
+    {
+        return $this->hasMany(Register::class);
+    }
+
+    protected $fillable = [
         "first_name",
         "last_name",
         "specialty"

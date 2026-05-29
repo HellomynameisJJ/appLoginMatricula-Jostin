@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string("first_name");
             $table->string("last_name");
             $table->date("birth_date");
-            $table->string("DNI");
+            $table->string("DNI")->unique();
             $table->string("address")->nullable();
             $table->string("phone")->nullable();
             $table->string("email")->unique();
-            $table->string("registration_status")->default("matriculado");
+            $table->enum("registration_status", ['Registered student', 'Inactive'])->default("Registered student");
             $table->timestamps();
         });
     }
