@@ -58,7 +58,6 @@ class LoginController extends Controller
 
     public function redirectToGithub()
     {
-        // Fuerza selector de cuentas — se mantiene del código original
         return Socialite::driver('github')->with(['prompt' => 'select_account'])->redirect();
     }
 
@@ -119,7 +118,6 @@ class LoginController extends Controller
 
     public function handleFacebookCallBack(Request $request)
     {
-        // Detecta si el usuario presionó "Cancelar" en el diálogo de Facebook
         if ($request->has('error') || $request->has('error_code')) {
             return redirect('/login')->with('error', 'El inicio de sesión con Facebook fue cancelado.');
         }
@@ -127,7 +125,6 @@ class LoginController extends Controller
         try {
             $facebookUser = Socialite::driver('facebook')->user();
 
-            // Respaldo seguro en caso de que la API de Facebook no devuelva email corporativo o verificado
             $email = $facebookUser->getEmail() ?? ($facebookUser->getId() . '@facebook.com');
 
             $user = User::updateOrCreate(
@@ -135,7 +132,7 @@ class LoginController extends Controller
                 [
                     'name'        => $facebookUser->getName() ?? 'Usuario Facebook',
                     'facebook_id' => $facebookUser->getId(),
-                    'password'    => bcrypt(uniqid()), // Contraseña aleatoria segura
+                    'password'    => bcrypt(uniqid()),
                 ]
             );
 
@@ -144,6 +141,43 @@ class LoginController extends Controller
 
         } catch (\Exception $e) {
             return redirect('/login')->with('error', 'Error con Facebook: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    // OAUTH: BITBUCKET
+    // =========================================================================
+
+    public function redirectToBitbucket()
+    {
+        return Socialite::driver('bitbucket')->redirect();
+    }
+
+    public function handleBitbucketCallBack(Request $request)
+    {
+        if ($request->has('error')) {
+            return redirect('/login')->with('error', 'El inicio de sesión con Bitbucket fue cancelado.');
+        }
+
+        try {
+            $bitbucketUser = Socialite::driver('bitbucket')->user();
+
+            $email = $bitbucketUser->getEmail() ?? ($bitbucketUser->getNickname() ?? uniqid()) . '@bitbucket.com';
+
+            $user = User::updateOrCreate(
+                ['email' => $email],
+                [
+                    'name'         => $bitbucketUser->getName() ?? $bitbucketUser->getNickname() ?? 'Usuario Bitbucket',
+                    'bitbucket_id' => $bitbucketUser->getId(),
+                    'password'     => bcrypt(uniqid()),
+                ]
+            );
+
+            Auth::login($user, true);
+            return redirect($this->redirectTo);
+
+        } catch (\Exception $e) {
+            return redirect('/login')->with('error', 'Error con Bitbucket: ' . $e->getMessage());
         }
     }
 
