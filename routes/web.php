@@ -18,6 +18,10 @@ Route::get('/login/google/callback', [App\Http\Controllers\Auth\LoginController:
 Route::get('login/github', [App\Http\Controllers\Auth\LoginController::class, 'redirectToGithub'])->name('github.login');
 Route::get('login/github/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleGithubCallBack']);
 
+// Facebook OAuth
+Route::get('/login/facebook', [App\Http\Controllers\Auth\LoginController::class, 'redirectToFacebook'])->name('facebook.login');
+Route::get('/login/facebook/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleFacebookCallBack']);
+
 // Dashboard protegido
 Route::middleware(['auth'])->get('/dashboard', function () {
     return view('dashboard');
