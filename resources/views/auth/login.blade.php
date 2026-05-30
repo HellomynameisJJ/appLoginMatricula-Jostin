@@ -17,6 +17,7 @@
 
 <main class="auth-page">
     <div class="auth-box">
+
         <div class="auth-logo">✦</div>
         <h1 class="auth-title">Bienvenido de vuelta</h1>
         <p class="auth-desc">Ingresa tus credenciales para acceder a la plataforma.</p>
@@ -50,7 +51,9 @@
                     Recordarme
                 </label>
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="link">¿Olvidaste tu contraseña?</a>
+                    <a href="{{ route('password.request') }}" class="link">
+                        ¿Olvidaste tu contraseña?
+                    </a>
                 @endif
             </div>
 
@@ -61,7 +64,8 @@
 
         <div class="oauth-row">
             <a href="{{ route('google.login') }}" class="oauth-btn">
-                <img src="https://www.google.com/favicon.ico" width="16"> Google
+                <img src="https://www.google.com/favicon.ico" width="16">
+                Google
             </a>
             <a href="{{ route('github.login') }}" class="oauth-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -69,12 +73,20 @@
                 </svg>
                 GitHub
             </a>
-        </div>
+            {{-- AGREGADO: botón Facebook --}}
+            <a href="{{ route('facebook.login') }}" class="oauth-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Facebook
+            </a>
+        </div>{{-- fin .oauth-row --}}
 
         <div class="auth-foot">
             ¿No tienes cuenta? <a href="{{ route('register') }}">Crear cuenta</a>
         </div>
-    </div>
+
+    </div>{{-- fin .auth-box --}}
 </main>
 
 </body>

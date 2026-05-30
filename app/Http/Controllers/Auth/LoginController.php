@@ -11,31 +11,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -49,8 +28,8 @@ class LoginController extends Controller
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
-    }    
-    
+    }
+
     public function handleGoogleCallBack()
     {
         try {
@@ -74,12 +53,12 @@ class LoginController extends Controller
     }
 
     // =========================================================================
-    // OAUTH: GITHUB (Con selector de cuentas forzado)
+    // OAUTH: GITHUB
     // =========================================================================
 
     public function redirectToGithub()
     {
-        // Esto obliga a GitHub a pedirte cuenta o login siempre, igual que Google
+        // Fuerza selector de cuentas — se mantiene del código original
         return Socialite::driver('github')
             ->with(['prompt' => 'select_account'])
             ->redirect();
@@ -88,12 +67,10 @@ class LoginController extends Controller
     public function handleGithubCallBack()
     {
         try {
-            // 1. Obtenemos el usuario de GitHub
             $githubUser = Socialite::driver('github')->user();
 
-            // Extraer el ID de forma segura controlando el formato de respuesta
-            $githubId = is_object($githubUser) && method_exists($githubUser, 'getId') 
-                        ? $githubUser->getId() 
+            $githubId = is_object($githubUser) && method_exists($githubUser, 'getId')
+                        ? $githubUser->getId()
                         : ($githubUser['id'] ?? null);
 
             if (!$githubId && isset($githubUser->user['id'])) {
@@ -104,24 +81,20 @@ class LoginController extends Controller
                 throw new \Exception("No se pudo obtener el ID de GitHub.");
             }
 
-            // 2. Buscamos usando DB pura para evitar conflictos de drivers en las consultas
             $dbUser = \DB::table('users')->where('github_id', $githubId)->first();
 
             if (!$dbUser) {
-                // Si no existe por ID, preparamos el correo (manejando correos privados)
                 $email = $githubUser->getEmail() ?? ($githubUser->getNickname() ?? uniqid()) . '@github.com';
-                
-                // Creamos el nuevo usuario a través del Modelo
+
                 $user = User::updateOrCreate(
                     ['email' => $email],
                     [
                         'name'      => $githubUser->getName() ?? $githubUser->getNickname() ?? 'Usuario GitHub',
-                        'github_id' => $githubId, 
-                        'password'  => bcrypt(uniqid()), 
+                        'github_id' => $githubId,
+                        'password'  => bcrypt(uniqid()),
                     ]
                 );
             } else {
-                // Si ya existía, lo recuperamos con el modelo User para guardarlo y loguearlo bien
                 $user = User::find($dbUser->id);
                 $user->update([
                     'name'  => $githubUser->getName() ?? $githubUser->getNickname() ?? $user->name,
@@ -129,12 +102,50 @@ class LoginController extends Controller
                 ]);
             }
 
-            // 3. Autenticar sesión y redirigir
             Auth::login($user, true);
             return redirect($this->redirectTo);
 
         } catch (\Exception $e) {
             return redirect('/login')->with('error', 'Error con GitHub: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    // OAUTH: FACEBOOK
+    // =========================================================================
+
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function handleFacebookCallBack(Request $request)
+    {
+        // Detecta si el usuario presionó "Cancelar" en el diálogo de Facebook
+        if ($request->has('error') || $request->has('error_code')) {
+            return redirect('/login')->with('error', 'El inicio de sesión con Facebook fue cancelado.');
+        }
+
+        try {
+            $facebookUser = Socialite::driver('facebook')->user();
+
+            // Respaldo seguro en caso de que la API de Facebook no devuelva email corporativo o verificado
+            $email = $facebookUser->getEmail() ?? ($facebookUser->getId() . '@facebook.com');
+
+            $user = User::updateOrCreate(
+                ['email' => $email],
+                [
+                    'name'        => $facebookUser->getName() ?? 'Usuario Facebook',
+                    'facebook_id' => $facebookUser->getId(),
+                    'password'    => bcrypt(uniqid()), // Contraseña aleatoria segura
+                ]
+            );
+
+            Auth::login($user, true);
+            return redirect($this->redirectTo);
+
+        } catch (\Exception $e) {
+            return redirect('/login')->with('error', 'Error con Facebook: ' . $e->getMessage());
         }
     }
 
