@@ -27,7 +27,7 @@ class LoginController extends Controller
 
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->with(['prompt' => 'select_account'])->redirect();
     }
 
     public function handleGoogleCallBack()
@@ -59,15 +59,13 @@ class LoginController extends Controller
     public function redirectToGithub()
     {
         // Fuerza selector de cuentas — se mantiene del código original
-        return Socialite::driver('github')
-            ->with(['prompt' => 'select_account'])
-            ->redirect();
+        return Socialite::driver('github')->with(['prompt' => 'select_account'])->redirect();
     }
 
     public function handleGithubCallBack()
     {
         try {
-            $githubUser = Socialite::driver('github')->user();
+            $githubUser = Socialite::driver('github')->stateless()->user();
 
             $githubId = is_object($githubUser) && method_exists($githubUser, 'getId')
                         ? $githubUser->getId()
@@ -116,7 +114,7 @@ class LoginController extends Controller
 
     public function redirectToFacebook()
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('facebook')->with(['prompt' => 'select_account'])->redirect();
     }
 
     public function handleFacebookCallBack(Request $request)
