@@ -317,10 +317,10 @@ body::before {
 .observe.visible { opacity:1; transform:none; }
 
 /* ── ANIMATIONS ── */
-@keyframes fadeUp  { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
-@keyframes spin    { to{rotate:360deg} }
-@keyframes breathe { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(167,139,250,0)} 50%{opacity:.7;box-shadow:0 0 24px rgba(167,139,250,.12)} }
-@keyframes blink   { 0%,100%{opacity:1} 50%{opacity:.3} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+@keyframes spin     { to{rotate:360deg} }
+@keyframes breathe  { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(167,139,250,0)} 50%{opacity:.7;box-shadow:0 0 24px rgba(167,139,250,.12)} }
+@keyframes blink    { 0%,100%{opacity:1} 50%{opacity:.3} }
 @keyframes floatChip{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
 /* ── RESPONSIVE ── */
@@ -344,7 +344,6 @@ body::before {
   padding: 2rem;
   animation: fadeUp .6s ease both;
 }
-
 .admin-toolbar {
   display: flex;
   justify-content: space-between;
@@ -353,35 +352,29 @@ body::before {
   flex-wrap: wrap;
   gap: 1rem;
 }
-
 .admin-actions {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
-
 .search-input {
   width: 250px;
-  height: 42px; /* Alineado con el tamaño de tus botones */
-  margin-bottom: 0; /* Reseteando márgenes por defecto */
+  height: 42px;
+  margin-bottom: 0;
 }
-
-/* ── TABLA ESTILO TEMA OSCURO ── */
 .table-card {
-  background: var(--sf); /* Superficie 1 */
+  background: var(--sf);
   border: 1px solid var(--border);
   border-radius: 20px;
   overflow-x: auto;
 }
-
 .data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
-
 .data-table th {
-  background: var(--sf2); /* Superficie 2 para contraste */
+  background: var(--sf2);
   color: var(--muted);
   font-weight: 600;
   font-size: 0.75rem;
@@ -390,7 +383,6 @@ body::before {
   padding: 1.2rem 1.5rem;
   border-bottom: 1px solid var(--border);
 }
-
 .data-table td {
   padding: 1.1rem 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -399,43 +391,111 @@ body::before {
   color: var(--text);
   transition: var(--t);
 }
-
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-
-.data-table tr:hover {
-  background: var(--sf2); /* Hover sutil con tus colores */
-}
-
-/* ── AVATARES Y CELDAS ESPECIALES ── */
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: var(--sf2); }
 .user-cell {
   display: flex;
   align-items: center;
   gap: 0.8rem;
 }
-
 .avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  /* Usamos los estilos de "dash-panel-icon" que ya tenías */
-  background: rgba(167,139,250,.06); 
+  width: 34px; height: 34px; border-radius: 9px;
+  background: rgba(167,139,250,.06);
   border: 1px solid rgba(167,139,250,.14);
   color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.9rem;
+}
+.user-name { font-weight: 600; }
+.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
+
+/* ══════════════════════════════════════
+   CHARACTER — personaje animado auth
+══════════════════════════════════════ */
+#char-wrap {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 115px;
+  z-index: 200;
+  pointer-events: none;
+  user-select: none;
 }
 
-.user-name {
+.char-bubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  transform-origin: bottom center;
+  background: rgba(13,13,17,.97);
+  border: 1px solid rgba(167,139,250,.4);
+  border-radius: 10px;
+  padding: .4rem .85rem;
+  font-family: 'Sora', sans-serif;
+  font-size: .72rem;
   font-weight: 600;
+  color: #a78bfa;
+  white-space: nowrap;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 4px 20px rgba(167,139,250,.15);
+  pointer-events: none;
+}
+.char-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(167,139,250,.4);
 }
 
-/* Botones pequeños para la tabla */
-.btn-sm {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.75rem;
+#char-svg { display: block; overflow: visible; }
+
+/* idle */
+.char-idle #char-svg { animation: char-bob 3s ease-in-out infinite; }
+
+/* writing */
+.char-writing #char-svg { animation: char-bob 3s ease-in-out infinite; }
+.char-writing #char-arm-r {
+  animation: arm-write .35s ease-in-out infinite alternate;
+  transform-box: fill-box; transform-origin: top center;
 }
+.char-writing #char-head {
+  animation: head-down .25s ease forwards;
+  transform-box: fill-box; transform-origin: center center;
+}
+
+/* erasing */
+.char-erasing #char-svg { animation: char-shake .22s ease-in-out infinite; }
+.char-erasing #char-arm-r {
+  animation: arm-erase .18s ease-in-out infinite alternate;
+  transform-box: fill-box; transform-origin: top center;
+}
+
+/* welcome */
+.char-welcome #char-svg { animation: char-bounce .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+.char-welcome #char-arm-r {
+  animation: arm-wave .5s ease-in-out 4;
+  transform-box: fill-box; transform-origin: top center;
+}
+.char-welcome #char-head {
+  animation: head-up .25s ease forwards;
+  transform-box: fill-box; transform-origin: center center;
+}
+.char-welcome #eyes-open   { display: none; }
+.char-welcome #eyes-closed { display: block; }
+.char-welcome #mouth-normal { display: none; }
+.char-welcome #mouth-happy  { display: block; }
+.char-welcome .char-bubble  { transform: translateX(-50%) scale(1); }
+
+@keyframes char-bob    { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-5px)} }
+@keyframes char-shake  { 0%,100%{transform:translateX(0)}    33%{transform:translateX(-3px)} 66%{transform:translateX(3px)} }
+@keyframes char-bounce { 0%{transform:scale(1) translateY(0)} 45%{transform:scale(1.09) translateY(-9px)} 100%{transform:scale(1) translateY(0)} }
+@keyframes arm-write   { from{transform:translateY(0) translateX(0)} to{transform:translateY(5px) translateX(3px)} }
+@keyframes arm-erase   { from{transform:translateX(-8px) rotate(-10deg)} to{transform:translateX(8px) rotate(10deg)} }
+@keyframes arm-wave    { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-28deg)} }
+@keyframes head-down   { to{transform:rotate(10deg) translateY(3px)} }
+@keyframes head-up     { to{transform:rotate(-5deg) translateY(-2px)} }
+
+@media(max-width:640px){ #char-wrap { display: none; } }
