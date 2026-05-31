@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\TeacherResource;
+use App\Http\Resources\TeachersResource;
 use App\Models\Teacher;
 
 class TeachersController extends Controller
@@ -15,7 +15,7 @@ class TeachersController extends Controller
     public function index()
     {
         $teachers = Teacher::all();
-        return TeacherResource::collection($teachers);
+        return TeachersResource::collection($teachers);
     }
 
     /**
@@ -24,7 +24,7 @@ class TeachersController extends Controller
     public function store(Request $request)
     {
         $teacher = Teacher::create($request->all());
-        return new TeacherResource($teacher);
+        return new TeachersResource($teacher);
     }
 
     /**
@@ -33,7 +33,7 @@ class TeachersController extends Controller
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
-        return new TeacherResource($teacher);
+        return new TeachersResource($teacher);
     }
 
     /**
@@ -43,7 +43,7 @@ class TeachersController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->update($request->all());
-        return new TeacherResource($teacher);
+        return new TeachersResource($teacher);
     }
 
     /**

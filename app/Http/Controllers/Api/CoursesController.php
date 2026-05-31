@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\CourseResource;
 use App\Models\Course;
+use App\Http\Resources\CoursesResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::all();
-        return CourseResource::collection($courses);
+        return CoursesResource::collection($courses);
     }
 
     /**
@@ -24,7 +24,7 @@ class CoursesController extends Controller
     public function store(Request $request)
     {
         $course = Course::create($request->all());
-        return new CourseResource($course);
+        return new CoursesResource($course);
     }
 
     /**
@@ -33,7 +33,7 @@ class CoursesController extends Controller
     public function show(string $id)
     {
         $course = Course::findOrFail($id);
-        return new CourseResource($course);
+        return new CoursesResource($course);
     }
 
     /**
@@ -43,7 +43,7 @@ class CoursesController extends Controller
     {
         $course = Course::findOrFail($id);
         $course->update($request->all());
-        return new CourseResource($course);
+        return new CoursesResource($course);
     }
 
     /**

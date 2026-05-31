@@ -26,11 +26,22 @@ class UpdateStudentsRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'birth_date' => 'required|date',
-            'DNI' => 'required|string|max:255|unique:students,DNI',
+            'DNI' => [
+                'required',
+                'string',
+                'max:8',
+                Rule::unique('students', 'DNI')->ignore($this->route('student'))
+            ],
             'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'required|string|email|max:255|unique:students,email',
-            'registration_status' => 'nullable|in:Registered student,Inactive',
+            'phone' => 'nullable|string|max:50',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('students', 'email')->ignore($this->route('student'))
+            ],
+            'registration_status' => 'nullable|in:Matriculado,Inactivo',
         ];
     }
 }

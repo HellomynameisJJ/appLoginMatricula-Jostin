@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('semester')->nullable();
             $table->date("registration_date")->nullable();
             $table->integer("final_note")->nullable();
-            $table->enum('status', ['enrolled', 'completed', 'dropped'])->default('enrolled');
+            $table->enum('status', ['Aprobado', 'Reprobado', 'Cursando'])->default('Cursando');
             $table->timestamps();
         });
     }

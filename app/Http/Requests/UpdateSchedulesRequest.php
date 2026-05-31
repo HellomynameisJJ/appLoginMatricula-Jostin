@@ -23,8 +23,7 @@ class UpdateSchedulesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "course_id" => "required|exists:courses,id",
-            'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'day_of_week' => 'required|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'classroom_nro' => 'required|string|max:255',

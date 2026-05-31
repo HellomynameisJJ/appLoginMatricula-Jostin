@@ -150,7 +150,7 @@ class LoginController extends Controller
 
     public function redirectToBitbucket()
     {
-        return Socialite::driver('bitbucket')->redirect();
+        return Socialite::driver('bitbucket')->with(['prompt' => 'select_account'])->redirect();
     }
 
     public function handleBitbucketCallBack(Request $request)

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("address")->nullable();
             $table->string("phone")->nullable();
             $table->string("email")->unique();
-            $table->enum("registration_status", ['Registered student', 'Inactive'])->default("Registered student");
+            $table->enum("registration_status", ['Matriculado', 'Inactivo'])->default("Matriculado");
             $table->timestamps();
         });
     }

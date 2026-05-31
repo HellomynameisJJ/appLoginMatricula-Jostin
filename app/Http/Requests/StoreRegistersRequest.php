@@ -27,10 +27,10 @@ class StoreRegistersRequest extends FormRequest
             'course_id' => 'required|exists:courses,id',
             'teacher_id' => 'required|exists:teachers,id',
             'schedule_id' => 'required|exists:schedules,id',
-            'semester' => 'nullable|string|max:255',
+            'semester' => 'nullable|string|max:50',
             'registration_date' => 'nullable|date',
             'final_note' => 'nullable|integer',
-            'status' => 'nullable|in:enrolled,completed,dropped',
+            'status' => 'nullable|in:Aprobado,Reprobado,Cursando',
         ];
     }
 }
