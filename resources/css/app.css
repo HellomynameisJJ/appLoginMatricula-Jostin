@@ -499,3 +499,25 @@ body::before {
 @keyframes head-up     { to{transform:rotate(-5deg) translateY(-2px)} }
 
 @media(max-width:640px){ #char-wrap { display: none; } }
+
+/* ... el resto de tus estilos actuales ... */
+
+/* Estilo del modal (Ahora centralizado) */
+.modal-overlay {
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #111827; 
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #374151;
+    text-align: center;
+    width: 90%; max-width: 400px;
+}
+.modal-content h3 { color: white; margin-bottom: 1rem; }
+.modal-content p { color: #9ca3af; margin-bottom: 2rem; }

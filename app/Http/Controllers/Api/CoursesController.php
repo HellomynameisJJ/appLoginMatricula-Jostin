@@ -53,6 +53,6 @@ class CoursesController extends Controller
     {
         $course = Course::findOrFail($id);
         $course->delete();
-        return response()->json(null, 204);
+        return redirect()->route('courses.index');
     }
 }

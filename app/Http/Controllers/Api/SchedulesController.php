@@ -15,7 +15,7 @@ class SchedulesController extends Controller
     public function index()
     {
         $schedules = Schedule::all();
-        return SchedulesResource::collection($schedules);
+        return view('schedules', compact('schedules'));
     }
 
     /**

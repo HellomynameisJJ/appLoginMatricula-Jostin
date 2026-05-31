@@ -12,7 +12,7 @@
         
         <div class="admin-actions">
             <input type="text" class="field-input search-input" placeholder="Buscar curso...">
-            <button class="btn btn-fill"><span>+</span> Agregar Curso</button>
+            <a href="{{ route('courses.create') }}" class="btn btn-fill" style="text-decoration: none;"><span>+</span> Agregar Curso</a>
         </div>
     </div>
 
@@ -29,7 +29,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($courses as $curso)
+                {{-- Usamos forelse para manejar el caso de vacío --}}
+                @forelse($courses as $curso)
                 <tr>
                     <td style="color:var(--muted);">{{ $curso->id }}</td>
                     <td>
@@ -39,14 +40,36 @@
                     <td style="color:var(--muted);">{{ $curso->description ?? 'Sin descripción' }}</td>
                     <td><span class="dash-row-badge">{{ $curso->credits }} Créditos</span></td>
                     <td>
-                        <button class="btn btn-line btn-sm" style="color: #f87171; border-color: rgba(248,113,113,.3);">Eliminar</button>
-                        <button class="btn btn-line btn-sm" style="color: #3b82f6; border-color: rgba(59,130,246,.3);">Editar</button>
+                        <a href="{{ route('courses.edit', $curso->id) }}" class="btn btn-line btn-sm" style="color: #3b82f6; border-color: rgba(59,130,246,.3); text-decoration: none; margin-right: 0.5rem;">Editar</a>
+
+                        <button type="button" onclick="openModal({{ $curso->id }}, 'courses')" class="btn btn-line btn-sm" style="color: #f87171; border-color: rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                {{-- Este tr solo aparece si $courses está vacío --}}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--muted);">
+                        No hay cursos registrados en el sistema.
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 
+</div>
+
+{{-- El modal debe ir FUERA de la tabla y del loop --}}
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>¿Eliminar curso?</h3>
+        <p>Esta acción no se puede deshacer. ¿Estás seguro de continuar?</p>
+        <form id="deleteForm" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
+            <button type="submit" class="btn btn-line" style="color: #f87171; border-color: #f87171;">Sí, eliminar</button>
+        </form>
+    </div>
 </div>
 @endsection

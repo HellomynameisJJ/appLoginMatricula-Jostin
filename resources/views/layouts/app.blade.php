@@ -39,10 +39,16 @@
            style="color: {{ request()->routeIs('teachers.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
            Profesores
         </a>
-        <a href="#" 
-           style="color: {{ request()->routeIs('matriculas.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+        <a href="{{ route('registers.index') }}" 
+           style="color: {{ request()->routeIs('registers.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
            Matrículas
         </a>
+
+        <a href="{{ route('schedules.index') }}" 
+           style="color: {{ request()->routeIs('schedules.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+           Horarios
+        </a>
+
     </div>
 
     <div class="n-user">

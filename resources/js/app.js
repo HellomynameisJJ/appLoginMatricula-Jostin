@@ -186,3 +186,24 @@ document.querySelectorAll('form').forEach(form => {
   });
 
 })();
+
+/* ══════════════════════════════════════
+   MODAL ELIMINACIÓN (Integración global)
+══════════════════════════════════════ */
+const deleteModal = document.getElementById('deleteModal');
+const deleteForm = document.getElementById('deleteForm');
+
+// Hacemos que estas funciones sean globales para que el HTML las encuentre
+window.openModal = function(id, routeName) {
+    if (deleteModal && deleteForm) {
+        deleteModal.style.display = 'flex';
+        // Hacemos la ruta dinámica para cualquier sección (Cursos, Profesores, etc.)
+        deleteForm.action = `/${routeName}/${id}`; 
+    }
+};
+
+window.closeModal = function() {
+    if (deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+};
