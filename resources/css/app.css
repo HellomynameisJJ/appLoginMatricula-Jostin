@@ -336,3 +336,106 @@ body::before {
   .stats { grid-template-columns:1fr 1fr; }
   .oauth-row { flex-direction:column; }
 }
+
+/* ── COMPONENTES DE ADMINISTRACIÓN ── */
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: fadeUp .6s ease both;
+}
+
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-input {
+  width: 250px;
+  height: 42px; /* Alineado con el tamaño de tus botones */
+  margin-bottom: 0; /* Reseteando márgenes por defecto */
+}
+
+/* ── TABLA ESTILO TEMA OSCURO ── */
+.table-card {
+  background: var(--sf); /* Superficie 1 */
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background: var(--sf2); /* Superficie 2 para contraste */
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 0.88rem;
+  color: var(--text);
+  transition: var(--t);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background: var(--sf2); /* Hover sutil con tus colores */
+}
+
+/* ── AVATARES Y CELDAS ESPECIALES ── */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  /* Usamos los estilos de "dash-panel-icon" que ya tenías */
+  background: rgba(167,139,250,.06); 
+  border: 1px solid rgba(167,139,250,.14);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+/* Botones pequeños para la tabla */
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+}

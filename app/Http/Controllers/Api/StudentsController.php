@@ -15,7 +15,7 @@ class StudentsController extends Controller
     public function index()
     {
         $students = Student::all();
-        return StudentsResource::collection($students);
+        return view('students', compact('students'));
     }
 
     /**

@@ -15,7 +15,7 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::all();
-        return CoursesResource::collection($courses);
+        return view('courses', compact('courses'));
     }
 
     /**
