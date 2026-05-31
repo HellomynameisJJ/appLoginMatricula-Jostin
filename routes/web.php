@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\TeachersController;
+use App\Http\Controllers\RegistersController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,7 +37,8 @@ Route::middleware(['auth'])->get('/dashboard', function () {
 
 // CRUD — Alumnos, Cursos, Profesores (protegidos con auth)
 Route::middleware(['auth'])->group(function () {
-    Route::resource('alumnos',    App\Http\Controllers\AlumnoController::class)->except(['show', 'create', 'edit']);
-    Route::resource('cursos',     App\Http\Controllers\CursoController::class)->except(['show', 'create', 'edit']);
-    Route::resource('profesores', App\Http\Controllers\ProfesorController::class)->except(['show', 'create', 'edit']);
+    // Fíjate cómo ahora incluimos \Api\ en la ruta
+    Route::resource("students", App\Http\Controllers\Api\StudentsController::class);
+    Route::resource("courses", App\Http\Controllers\Api\CoursesController::class);
+    Route::resource("teachers", App\Http\Controllers\Api\TeachersController::class);
 });

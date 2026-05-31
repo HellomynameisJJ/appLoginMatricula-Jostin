@@ -50,8 +50,7 @@
         </p>
 
         <div class="dash-actions">
-            <a href="#" class="btn btn-fill btn-lg">Explorar plataforma →</a>
-            <a href="#" class="btn btn-line btn-lg">Ver historial</a>
+            <a href="{{ route('students.index') }}" class="btn btn-fill"> Explorar plataforma &rarr;</a>
         </div>
 
         <div class="stats">

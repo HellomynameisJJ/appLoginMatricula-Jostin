@@ -13,22 +13,46 @@
 <body>
 
 @auth
-<nav class="app-nav">
-    <a href="{{ url('/home') }}" class="logo" style="margin-bottom:0;">
-        <div class="logo-mark">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
+<nav class="n">
+    <a href="{{ url('/home') }}" class="n-brand">
+        <div class="n-logo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z"/>
             </svg>
         </div>
-        <span class="logo-text">{{ config('app.name') }}</span>
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <span class="n-name">{{ config('app.name', 'Laravel') }}</span>
+            <span class="n-sub" style="font-size:0.72rem; color:var(--muted);">Plataforma académica</span>
+        </div>
     </a>
-    <div class="nav-actions">
-        <span style="color:var(--muted);font-size:0.85rem;">{{ Auth::user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+
+    <div class="nav-links" style="display:flex; gap:1.5rem; font-size:0.85rem; font-weight:500;">
+        <a href="{{ route('courses.index') }}" 
+           style="color: {{ request()->routeIs('courses.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+           Cursos
+        </a>
+        <a href="{{ route('students.index') }}" 
+           style="color: {{ request()->routeIs('students.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+           Estudiantes
+        </a>
+        <a href="{{ route('teachers.index') }}" 
+           style="color: {{ request()->routeIs('teachers.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+           Profesores
+        </a>
+        <a href="#" 
+           style="color: {{ request()->routeIs('matriculas.*') ? 'var(--accent)' : 'var(--muted)' }}; text-decoration:none; transition:var(--t);">
+           Matrículas
+        </a>
+    </div>
+
+    <div class="n-user">
+        <div class="n-user-info" style="text-align: right;">
+            <span style="display:block; font-size:0.72rem; color:var(--muted);">Sesión iniciada</span>
+            <strong style="font-size:0.88rem;">{{ Auth::user()->name }}</strong>
+        </div>
+        <form method="POST" action="{{ route('logout') }}" style="margin:0; margin-left: 1rem;">
             @csrf
-            <button type="submit" class="btn-nav">Cerrar sesión</button>
+            <button type="submit" class="btn btn-ghost" style="padding: 0.5rem 1.2rem;">Salir</button>
         </form>
     </div>
 </nav>
