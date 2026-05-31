@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-    @foreach($students as $student)
+    @forelse($students as $student)
     <tr>
         <td style="color:var(--muted);">{{ $student->id }}</td>
         <td>
@@ -47,19 +47,36 @@
         <td>{{ $student->email }}</td>
         <td>{{ $student->registration_status }}</td>
         <td>
+                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-line btn-sm" style="color: #3b82f6; border-color: rgba(59,130,246,.3); text-decoration: none; margin-right: 0.5rem;">Editar</a>
 
-            <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-line btn-sm" style="color: #f87171; border-color: rgba(248,113,113,.3);">Eliminar</button>
-                <button class="btn btn-line btn-sm" style="color: #3b82f6; border-color: rgba(59,130,246,.3);">Editar</button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
+                        <button type="button" onclick="openModal({{ $student->id }}, 'students')" class="btn btn-line btn-sm" style="color: #f87171; border-color: rgba(248,113,113,.3);">Eliminar</button>
+                    </td>
+                </tr>
+                @empty
+                {{-- Este tr solo aparece si $students está vacío --}}
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 2rem; color: var(--muted);">
+                        No hay estudiantes registrados en el sistema.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
         </table>
     </div>
 
+</div>
+
+{{-- El modal debe ir FUERA de la tabla y del loop --}}
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>¿Eliminar estudiante?</h3>
+        <p>Esta acción no se puede deshacer. ¿Estás seguro de continuar?</p>
+        <form id="deleteForm" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
+            <button type="submit" class="btn btn-line" style="color: #f87171; border-color: #f87171;">Sí, eliminar</button>
+        </form>
+    </div>
 </div>
 @endsection

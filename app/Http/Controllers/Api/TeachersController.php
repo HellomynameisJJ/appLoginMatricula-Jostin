@@ -15,7 +15,7 @@ class TeachersController extends Controller
     public function index()
     {
         $teachers = Teacher::all();
-        return TeachersResource::collection($teachers);
+        return view('teachers', compact('teachers'));
     }
 
     /**
@@ -53,6 +53,6 @@ class TeachersController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->delete();
-        return response()->json(null, 204);
+        return redirect()->route('teachers.index');
     }
 }

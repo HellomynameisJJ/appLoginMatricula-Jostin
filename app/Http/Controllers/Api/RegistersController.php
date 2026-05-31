@@ -15,7 +15,7 @@ class RegistersController extends Controller
     public function index()
     {
         $registers = Register::all();
-        return RegistersResource::collection($registers);
+        return view('registers', compact('registers'));
     }
 
     /**
