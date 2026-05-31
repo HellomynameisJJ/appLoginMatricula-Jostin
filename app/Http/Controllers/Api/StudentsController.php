@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\StudentResource;
+use App\Http\Resources\StudentsResource;
 use App\Models\Student;
 
 class StudentsController extends Controller
@@ -15,7 +15,7 @@ class StudentsController extends Controller
     public function index()
     {
         $students = Student::all();
-        return StudentResource::collection($students);
+        return StudentsResource::collection($students);
     }
 
     /**
@@ -24,7 +24,7 @@ class StudentsController extends Controller
     public function store(Request $request)
     {
         $student = Student::create($request->all());
-        return new StudentResource($student);
+        return new StudentsResource($student);
     }
 
     /**
@@ -33,7 +33,7 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         $student = Student::findOrFail($id);
-        return new StudentResource($student);
+        return new StudentsResource($student);
     }
 
     /**
@@ -43,7 +43,7 @@ class StudentsController extends Controller
     {
         $student = Student::findOrFail($id);
         $student->update($request->all());
-        return new StudentResource($student);
+        return new StudentsResource($student);
     }
 
     /**

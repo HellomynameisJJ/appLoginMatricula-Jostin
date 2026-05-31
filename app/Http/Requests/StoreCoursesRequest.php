@@ -24,8 +24,9 @@ class StoreCoursesRequest extends FormRequest
     {
         return [
             'name_course' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'sku' => 'required|string|max:50|unique:courses,sku',
             'credits' => 'required|integer|min:1',
+            'description' => 'nullable|string',
         ];
     }
 }

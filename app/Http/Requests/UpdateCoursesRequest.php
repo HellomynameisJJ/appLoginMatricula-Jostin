@@ -24,8 +24,14 @@ class UpdateCoursesRequest extends FormRequest
     {
         return [
             'name_course' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'sku' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('courses', 'sku')->ignore($this->route('course'))
+            ],
             'credits' => 'required|integer|min:1',
+            'description' => 'nullable|string',
         ];
     }
 }

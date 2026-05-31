@@ -26,11 +26,11 @@ class StoreStudentsRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'birth_date' => 'required|date',
-            'DNI' => 'required|string|max:255|unique:students,DNI',
+            'DNI' => 'required|string|max:8|unique:students,DNI',
             'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
             'email' => 'required|string|email|max:255|unique:students,email',
-            'registration_status' => 'nullable|in:Registered student,Inactive',
+            'registration_status' => 'nullable|in:Matriculado ,Inactivo',
         ];
     }
 }

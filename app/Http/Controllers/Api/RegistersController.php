@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\RegisterResource;
+use App\Http\Resources\RegistersResource;
 use App\Models\Register;
 
 class RegistersController extends Controller
@@ -15,7 +15,7 @@ class RegistersController extends Controller
     public function index()
     {
         $registers = Register::all();
-        return RegisterResource::collection($registers);
+        return RegistersResource::collection($registers);
     }
 
     /**
@@ -24,7 +24,7 @@ class RegistersController extends Controller
     public function store(Request $request)
     {
         $register = Register::create($request->all());
-        return new RegisterResource($register);
+        return new RegistersResource($register);
     }
 
     /**
@@ -33,7 +33,7 @@ class RegistersController extends Controller
     public function show(string $id)
     {
         $register = Register::findOrFail($id);
-        return new RegisterResource($register);
+        return new RegistersResource($register);
     }
 
     /**
@@ -43,7 +43,7 @@ class RegistersController extends Controller
     {
         $register = Register::findOrFail($id);
         $register->update($request->all());
-        return new RegisterResource($register);
+        return new RegistersResource($register);
     }
 
     /**

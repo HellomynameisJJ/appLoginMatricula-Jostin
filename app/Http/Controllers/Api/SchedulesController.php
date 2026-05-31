@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\ScheduleResource;
+use App\Http\Resources\SchedulesResource;
 use App\Models\Schedule;
 
 class SchedulesController extends Controller
@@ -15,7 +15,7 @@ class SchedulesController extends Controller
     public function index()
     {
         $schedules = Schedule::all();
-        return ScheduleResource::collection($schedules);
+        return SchedulesResource::collection($schedules);
     }
 
     /**
@@ -24,7 +24,7 @@ class SchedulesController extends Controller
     public function store(Request $request)
     {
         $schedule = Schedule::create($request->all());
-        return new ScheduleResource($schedule);
+        return new SchedulesResource($schedule);
     }
 
     /**
@@ -33,7 +33,7 @@ class SchedulesController extends Controller
     public function show(string $id)
     {
         $schedule = Schedule::findOrFail($id);
-        return new ScheduleResource($schedule);
+        return new SchedulesResource($schedule);
     }
 
     /**
@@ -43,7 +43,7 @@ class SchedulesController extends Controller
     {
         $schedule = Schedule::findOrFail($id);
         $schedule->update($request->all());
-        return new ScheduleResource($schedule);
+        return new SchedulesResource($schedule);
     }
 
     /**
