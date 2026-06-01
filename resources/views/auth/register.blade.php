@@ -1,69 +1,64 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crear cuenta — {{ config('app.name') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body>
+@extends('layouts.app')
 
-<nav class="n">
-    <a href="/" class="n-brand">
-        <div class="n-logo">✦</div>
-        <span class="n-name">{{ config('app.name') }}</span>
-    </a>
-</nav>
+@section('title', 'Crear cuenta')
 
-<main class="auth-page">
+@section('content')
+<div class="auth-page">
     <div class="auth-box">
+
         <div class="auth-logo">✦</div>
-        <h1 class="auth-title">Crea tu cuenta</h1>
-        <p class="auth-desc">Únete a la plataforma universitaria más moderna.</p>
+        <div class="auth-title">Crear cuenta</div>
+        <div class="auth-desc">Únete a {{ config('app.name') }} y gestiona tu experiencia académica.</div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
             <div class="field">
-                <label class="field-label">Nombre completo</label>
-                <input type="text" name="name" value="{{ old('name') }}"
-                    class="field-input @error('name') is-invalid @enderror"
-                    placeholder="Juan Pérez" required>
-                @error('name')<span class="field-error">{{ $message }}</span>@enderror
+                <label class="field-label" for="name">Nombre completo</label>
+                <input id="name" type="text" class="field-input @error('name') is-invalid @enderror"
+                    name="name" value="{{ old('name') }}" required autocomplete="name" autofocus
+                    placeholder="Tu nombre">
+                @error('name')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="field">
-                <label class="field-label">Correo electrónico</label>
-                <input type="email" name="email" value="{{ old('email') }}"
-                    class="field-input @error('email') is-invalid @enderror"
-                    placeholder="correo@universidad.com" required>
-                @error('email')<span class="field-error">{{ $message }}</span>@enderror
+                <label class="field-label" for="email">Correo electrónico</label>
+                <input id="email" type="email" class="field-input @error('email') is-invalid @enderror"
+                    name="email" value="{{ old('email') }}" required autocomplete="email"
+                    placeholder="tu@correo.com">
+                @error('email')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="field">
-                <label class="field-label">Contraseña</label>
-                <input type="password" name="password"
-                    class="field-input @error('password') is-invalid @enderror"
-                    placeholder="Mínimo 8 caracteres" required>
-                @error('password')<span class="field-error">{{ $message }}</span>@enderror
+                <label class="field-label" for="password">Contraseña</label>
+                <input id="password" type="password" class="field-input @error('password') is-invalid @enderror"
+                    name="password" required autocomplete="new-password"
+                    placeholder="Mínimo 8 caracteres">
+                @error('password')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="field">
-                <label class="field-label">Confirmar contraseña</label>
-                <input type="password" name="password_confirmation"
-                    class="field-input" placeholder="Repite tu contraseña" required>
+                <label class="field-label" for="password-confirm">Confirmar contraseña</label>
+                <input id="password-confirm" type="password" class="field-input"
+                    name="password_confirmation" required autocomplete="new-password"
+                    placeholder="Repite tu contraseña">
             </div>
 
-            <button type="submit" class="btn btn-fill btn-full" style="margin-top:.4rem;">
-                Crear cuenta →
+            <button type="submit" class="btn btn-fill btn-full" style="margin-top:.5rem;">
+                Crear cuenta
             </button>
         </form>
 
         <div class="auth-foot">
             ¿Ya tienes cuenta? <a href="{{ route('login') }}">Iniciar sesión</a>
         </div>
-    </div>
-</main>
 
-</body>
-</html>
+    </div>
+</div>
+@endsection

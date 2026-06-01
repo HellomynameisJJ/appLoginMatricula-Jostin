@@ -9,50 +9,54 @@ use Illuminate\Http\Request;
 
 class CoursesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $courses = Course::all();
         return view('courses', compact('courses'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // ARREGLADO: Ahora busca los cursos y se los envía a la vista
+    public function create()
+    {
+        $courses = Course::all();
+        return view('courses', compact('courses'));
+    }
+    
     public function store(Request $request)
     {
-        $course = Course::create($request->all());
-        return new CoursesResource($course);
+        $request->validate([
+            'name_course' => 'required|string|max:150',
+            'sku'         => 'required|string|max:50',
+            'credits'     => 'required|integer|min:1',
+        ]);
+
+        Course::create($request->all());
+        return redirect()->route('courses.index')->with('success', 'Curso creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $course = Course::findOrFail($id);
         return new CoursesResource($course);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id)
+    {
+        $course = Course::findOrFail($id);
+        return view('courses_edit', compact('course'));
+    }
+
     public function update(Request $request, string $id)
     {
         $course = Course::findOrFail($id);
         $course->update($request->all());
-        return new CoursesResource($course);
+        return redirect()->route('courses.index')->with('success', 'Curso actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $course = Course::findOrFail($id);
         $course->delete();
-        return redirect()->route('courses.index');
+        return redirect()->route('courses.index')->with('success', 'Curso eliminado.');
     }
 }

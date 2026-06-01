@@ -6,53 +6,81 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\RegistersResource;
 use App\Models\Register;
+use App\Models\Student;
+use App\Models\Course;
+use App\Models\Teacher;
+use App\Models\Schedule;
 
 class RegistersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Ambos métodos deben compartir la misma data para evitar errores en la vista
     public function index()
     {
-        $registers = Register::all();
-        return view('registers', compact('registers'));
+        $registers = Register::with(['student', 'course', 'teacher', 'schedule'])->get();
+        $students  = Student::all();
+        $courses   = Course::all();
+        $teachers  = Teacher::all();
+        $schedules = Schedule::all();
+
+        return view('registers', compact('registers', 'students', 'courses', 'teachers', 'schedules'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function create()
+    {
+        $registers = Register::with(['student', 'course', 'teacher', 'schedule'])->get();
+        $students  = Student::all();
+        $courses   = Course::all();
+        $teachers  = Teacher::all();
+        $schedules = Schedule::all();
+
+        return view('registers', compact('registers', 'students', 'courses', 'teachers', 'schedules'));
+    }
+
     public function store(Request $request)
     {
-        $register = Register::create($request->all());
-        return new RegistersResource($register);
+        $request->validate([
+            'student_id'        => 'required|exists:students,id',
+            'course_id'         => 'required|exists:courses,id',
+            'teacher_id'        => 'required|exists:teachers,id',
+            'schedule_id'       => 'required|exists:schedules,id',
+            'semester'          => 'required|string|max:50', // Agregado según tu $fillable
+            'registration_date' => 'required|date',
+            'status'            => 'required|string|max:50',
+        ]);
+
+        Register::create($request->all());
+        return redirect()->route('registers.index')->with('success', 'Matrícula registrada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    
+
     public function show(string $id)
     {
         $register = Register::findOrFail($id);
         return new RegistersResource($register);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id)
+    {
+        $register  = Register::findOrFail($id);
+        $students  = Student::all();
+        $courses   = Course::all();
+        $teachers  = Teacher::all();
+        $schedules = Schedule::all();
+        return view('registers_edit', compact('register', 'students', 'courses', 'teachers', 'schedules'));
+    }
+
     public function update(Request $request, string $id)
     {
         $register = Register::findOrFail($id);
         $register->update($request->all());
-        return new RegistersResource($register);
+        return redirect()->route('registers.index')->with('success', 'Matrícula actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $register = Register::findOrFail($id);
         $register->delete();
-        return response()->json(null, 204);
+        return redirect()->route('registers.index')->with('success', 'Matrícula eliminada.');
     }
 }

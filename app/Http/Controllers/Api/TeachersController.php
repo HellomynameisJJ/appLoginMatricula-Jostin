@@ -9,50 +9,55 @@ use App\Models\Teacher;
 
 class TeachersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $teachers = Teacher::all();
         return view('teachers', compact('teachers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   public function create()
+{
+    // Traemos los profesores de la base de datos
+    $teachers = Teacher::all(); // O como se llame tu modelo
+
+    // Se los pasamos a la vista con compact
+    return view('teachers', compact('teachers'));
+}
+
     public function store(Request $request)
     {
-        $teacher = Teacher::create($request->all());
-        return new TeachersResource($teacher);
+        $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+        ]);
+
+        Teacher::create($request->all());
+        return redirect()->route('teachers.index')->with('success', 'Profesor agregado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $teacher = Teacher::findOrFail($id);
         return new TeachersResource($teacher);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id)
+    {
+        $teacher = Teacher::findOrFail($id);
+        return view('teachers_edit', compact('teacher'));
+    }
+
     public function update(Request $request, string $id)
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->update($request->all());
-        return new TeachersResource($teacher);
+        return redirect()->route('teachers.index')->with('success', 'Profesor actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->delete();
-        return redirect()->route('teachers.index');
+        return redirect()->route('teachers.index')->with('success', 'Profesor eliminado.');
     }
 }

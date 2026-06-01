@@ -1,65 +1,107 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Horarios')
+@section('hero_img', 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=1400&auto=format&fit=crop&q=80')
+@section('hero_icon', '🗓️')
+@section('hero_title') Gestión de <em>Horarios</em> @endsection
+@section('hero_subtitle', 'Administra los horarios por curso, día de la semana y aula asignada.')
 
 @section('content')
-<div class="admin-container">
-    
-    <div class="admin-toolbar">
-        <div>
-            <h1 class="dash-title" style="font-size: 2.2rem; margin-bottom: 0;">Tabla de <span>Horarios</span></h1>
+<div class="admin-container" style="max-width:100%;padding:0;">
+
+    {{-- SI LA RUTA ES 'create', SE MUESTRA EL FORMULARIO DE REGISTRO --}}
+    @if(request()->routeIs('schedules.create'))
+    <div class="table-card" style="padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(167,139,250,.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="margin: 0; color: var(--accent);">✦ Registrar Nuevo Horario</h3>
+            <a href="{{ route('schedules.index') }}" class="btn btn-line btn-sm" style="text-decoration: none;">Volver a la lista</a>
         </div>
-        
-        <div class="admin-actions">
-            <input type="text" class="field-input search-input" placeholder="Buscar horario...">
-            <a href="{{ route('schedules.create') }}" class="btn btn-fill" style="text-decoration: none;"><span>+</span> Nuevo Horario</a>
+
+        <form method="POST" action="{{ route('schedules.store') }}">
+            @csrf
+            <div class="field" style="margin-bottom: 1rem;">
+                <label class="field-label">Asignar Curso</label>
+                <select name="course_id" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                    <option value="">Seleccione un curso...</option>
+                    @foreach($courses as $curso)
+                        <option value="{{ $curso->id }}">{{ $curso->name_course }} ({{ $curso->sku }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="field" style="margin-bottom: 1rem;">
+                <label class="field-label">Día de la Semana</label>
+                <select name="day_of_week" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miércoles">Miércoles</option>
+                    <option value="Jueves">Jueves</option>
+                    <option value="Viernes">Viernes</option>
+                    <option value="Sábado">Sábado</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Hora de Inicio</label>
+                    <input type="time" name="start_time" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Hora de Fin</label>
+                    <input type="time" name="end_time" class="field-input" required>
+                </div>
+            </div>
+            <div class="field" style="margin-bottom: 1.5rem;">
+                <label class="field-label">Número de Aula</label>
+                <input type="text" name="classroom_nro" class="field-input" placeholder="Ej. Aula 402-B" required>
+            </div>
+            <button type="submit" class="btn btn-fill">Guardar Horario</button>
+        </form>
+    </div>
+    @endif
+
+    <div class="prem-toolbar observe">
+        <div class="prem-toolbar-left">
+            <div>
+                <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem;">Total de horarios</div>
+                <div style="font-size:1.4rem;font-weight:700;letter-spacing:-.03em;color:var(--accent);">{{ count($schedules) }} <span style="font-size:.8rem;color:var(--muted);font-weight:400;">horarios</span></div>
+            </div>
+        </div>
+        <div class="prem-toolbar-right">
+            <div class="search-wrap">
+                <input type="text" class="field-input search-input" placeholder="Buscar horario...">
+            </div>
+            <a href="{{ route('schedules.create') }}" class="btn btn-fill" style="text-decoration: none;"><span>+</span> Añadir horario</a>
         </div>
     </div>
 
-    <div class="table-card">
+    <div class="table-card observe">
         <table class="data-table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Curso</th>
                     <th>Día</th>
-                    <th>Horas</th>
+                    <th>Horario</th>
                     <th>Aula</th>
-                    <th>Acciones</th>
+                    <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($schedules as $horario)
                 <tr>
-                    <td style="color:var(--muted);">{{ $horario->id }}</td>
-                    
-                    <td>
-                        <span style="font-weight: 600;">{{ $horario->course->name_course ?? 'Curso no asignado' }}</span>
-                    </td>
-                    
-                    <td>
-                        <span class="dash-row-badge" style="background: rgba(167,139,250,.09); color: var(--accent);">
-                            {{ $horario->day_of_week }}
-                        </span>
-                    </td>
-                    
-                    <td style="color:var(--muted);">
-                        {{ \Carbon\Carbon::parse($horario->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($horario->end_time)->format('H:i') }}
-                    </td>
-                    
-                    <td style="color:var(--muted);">
-                        {{ $horario->classroom_nro }}
-                    </td>
-                    
-                    <td>
-                        <a href="{{ route('schedules.edit', $horario->id) }}" class="btn btn-line btn-sm" style="color: #3b82f6; border-color: rgba(59,130,246,.3); text-decoration: none; margin-right: 0.5rem;">Editar</a>
-
-                        <button type="button" onclick="openModal({{ $horario->id }}, 'schedules')" class="btn btn-line btn-sm" style="color: #f87171; border-color: rgba(248,113,113,.3);">Eliminar</button>
+                    <td style="color:var(--muted); font-weight:700;">#{{ $horario->id }}</td>
+                    <td style="font-weight:600;color:var(--text);">{{ $horario->course->name_course ?? 'Curso no asignado' }}</td>
+                    <td><span class="badge">{{ $horario->day_of_week }}</span></td>
+                    <td style="color:var(--accent); font-weight:600;">{{ $horario->start_time }} - {{ $horario->end_time }}</td>
+                    <td><span style="color:var(--muted);">🚪 {{ $horario->classroom_nro }}</span></td>
+                    <td style="text-align:right;">
+                        <a href="{{ route('schedules.edit', $horario->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
+                        <button type="button" onclick="openModal({{ $horario->id }}, 'schedules')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--muted);">
+                    <td colspan="6" style="text-align:center;padding:3rem;color:var(--muted);">
+                        <div style="font-size:2rem;margin-bottom:.8rem;">🗓️</div>
                         No hay horarios registrados en el sistema.
                     </td>
                 </tr>
@@ -72,14 +114,15 @@
 
 <div id="deleteModal" class="modal-overlay">
     <div class="modal-content">
+        <div class="modal-icon">⚠️</div>
         <h3>¿Eliminar horario?</h3>
         <p>Esta acción no se puede deshacer. ¿Estás seguro de continuar?</p>
-        
         <form id="deleteForm" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
-            <button type="submit" class="btn btn-line" style="color: #f87171; border-color: #f87171;">Sí, eliminar</button>
+            @csrf @method('DELETE')
+            <div class="modal-actions">
+                <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#f87171; border-color:#f87171;">Sí, eliminar</button>
+            </div>
         </form>
     </div>
 </div>
