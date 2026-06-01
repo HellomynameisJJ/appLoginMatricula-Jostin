@@ -6,53 +6,62 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\SchedulesResource;
 use App\Models\Schedule;
+use App\Models\Course;
 
 class SchedulesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $schedules = Schedule::all();
         return view('schedules', compact('schedules'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // ARREGLADO: Ahora incluye los horarios ($schedules) además de los cursos
+    public function create()
     {
-        $schedule = Schedule::create($request->all());
-        return new SchedulesResource($schedule);
+        $schedules = Schedule::all();
+        $courses = Course::all();
+        return view('schedules', compact('schedules', 'courses'));
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'course_id'      => 'required|exists:courses,id',
+            'day_of_week'    => 'required|string|max:20',
+            'start_time'     => 'required',
+            'end_time'       => 'required',
+            'classroom_nro'  => 'required|string|max:20',
+        ]);
+
+        Schedule::create($request->all());
+        return redirect()->route('schedules.index')->with('success', 'Horario creado correctamente.');
+    }
+
     public function show(string $id)
     {
         $schedule = Schedule::findOrFail($id);
         return new SchedulesResource($schedule);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        $courses  = Course::all();
+        return view('schedules_edit', compact('schedule', 'courses'));
+    }
+
     public function update(Request $request, string $id)
     {
         $schedule = Schedule::findOrFail($id);
         $schedule->update($request->all());
-        return new SchedulesResource($schedule);
+        return redirect()->route('schedules.index')->with('success', 'Horario actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $schedule = Schedule::findOrFail($id);
         $schedule->delete();
-        return response()->json(null, 204);
+        return redirect()->route('schedules.index')->with('success', 'Horario eliminado.');
     }
 }
