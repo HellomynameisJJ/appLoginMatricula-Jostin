@@ -98,7 +98,18 @@
                         {{ $horario->created_at ? $horario->created_at->format('d/m/Y') : '--' }}
                     </td>
                     <td style="text-align:right;">
-                        <a href="{{ route('schedules.edit', $horario->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
+                        <button type="button" 
+                        class="btn btn-line btn-sm" 
+                        style="color:#3b82f6;border-color:rgba(59,130,246,.3);margin-right:.4rem;"
+                        data-id="{{ $horario->id }}"
+                        data-name="{{ $horario->course->name_course ?? 'Curso no asignado' }}"
+                        data-dow="{{ $horario->day_of_week ?? '' }}"
+                        data-st="{{ $horario->start_time ?? '' }}"
+                        data-et="{{ $horario->end_time ?? '' }}"
+                        data-cn="{{ $horario->classroom_nro ?? '' }}"
+                        onclick="openEditScheduleModal(this)">
+                        Editar
+                    </button>
                         <button type="button" onclick="openModal({{ $horario->id }}, 'schedules')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
@@ -126,6 +137,56 @@
             <div class="modal-actions">
                 <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
                 <button type="submit" class="btn btn-line" style="color:#f87171; border-color:#f87171;">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editScheduleModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 600px; width: 90%;">
+        <div class="modal-icon" style="color: #3b82f6;">✏️</div>
+        <h3 style="color: #3b82f6;">Editar Horario</h3>
+        
+        <form id="editScheduleForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Curso <span style="font-size: 0.7rem; color: var(--muted);">(No editable)</span></label>
+                    <input type="text" id="edit_sched_course" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Día de la Semana</label>
+                    <select id="edit_sched_dow" name="day_of_week" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                        <option value="Sábado">Sábado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Hora de inicio</label>
+                    <input type="time" id="edit_sched_st" name="start_time" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Hora de finalización</label>
+                    <input type="time" id="edit_sched_et" name="end_time" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1.5;">
+                    <label class="field-label">Aula</label>
+                    <input type="text" id="edit_sched_cn" name="classroom_nro" class="field-input" required>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="closeEditScheduleModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#3b82f6; border-color:#3b82f6;">Guardar Cambios</button>
             </div>
         </form>
     </div>

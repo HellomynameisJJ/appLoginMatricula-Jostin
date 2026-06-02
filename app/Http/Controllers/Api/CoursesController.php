@@ -40,12 +40,6 @@ class CoursesController extends Controller
         return new CoursesResource($course);
     }
 
-    public function edit(string $id)
-    {
-        $course = Course::findOrFail($id);
-        return view('courses_edit', compact('course'));
-    }
-
     public function update(Request $request, string $id)
     {
         $course = Course::findOrFail($id);

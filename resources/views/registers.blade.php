@@ -118,6 +118,7 @@
                         <th>Semestre</th>
                         <th>F. Matrícula</th>
                         <th>Estado</th>
+                        <th>Nota Final</th>
                         <th style="text-align:right;">Acciones</th>
                     </tr>
                 </thead>
@@ -161,9 +162,29 @@
                                 {{ $registro->status }}
                             </span>
                         </td>
-                        
+
+                        <td style="white-space: nowrap;">
+                            <span class="badge" style="background: rgba(59,130,246,.1); color: #3b82f6; font-size: .75rem;">
+                                {{ $registro->final_note ? 'Nota: ' . $registro->final_note : 'Sin nota' }}
+                            </span>
+                        </td>
+
                         <td style="text-align:right; white-space: nowrap;">
-                            <a href="{{ route('registers.edit', $registro->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
+                        <button 
+                        type="button" 
+                        class="btn btn-line btn-sm" 
+                        style="color:#3b82f6;border-color:rgba(59,130,246,.3);margin-right:.4rem;"
+                        data-id="{{ $registro->id }}"
+                        data-student="{{ $registro->student->first_name ?? '' }} {{ $registro->student->last_name ?? '' }}"
+                        data-course="{{ $registro->course->name_course ?? '' }}"
+                        data-teacher="{{ $registro->teacher->first_name ?? '' }} {{ $registro->teacher->last_name ?? '' }}"
+                        data-schedule="{{ $registro->schedule->day_of_week ?? 'Sin horario' }} {{ $registro->schedule->start_time ? '- ' . \Carbon\Carbon::parse($registro->schedule->start_time)->format('H:i') : '' }}"
+                        data-semester="{{ $registro->semester }}"
+                        data-note="{{ $registro->final_note }}"
+                        data-status="{{ $registro->status }}"
+                        onclick="openEditRegisterModal(this)">
+                        Editar
+                        </button>
                             <button type="button" onclick="openModal({{ $registro->id }}, 'registers')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                         </td>
                     </tr>
@@ -181,17 +202,56 @@
     </div>
 </div>
 
-<div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-icon">⚠️</div>
-        <h3>¿Eliminar matrícula?</h3>
-        <p>Esta acción no se puede deshacer. ¿Estás seguro de continuar?</p>
-        <form id="deleteForm" method="POST" style="display:inline;">
-            @csrf 
-            @method('DELETE')
-            <div class="modal-actions">
-                <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
-                <button type="submit" class="btn btn-line" style="color:#f87171; border-color:#f87171;">Sí, eliminar</button>
+<div id="editRegisterModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 700px; width: 95%;">
+        <div class="modal-icon" style="color: #3b82f6;">✏️</div>
+        <h3 style="color: #3b82f6;">Editar Matrícula</h3>
+        
+        <form id="editRegisterForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                <div class="field">
+                    <label class="field-label" style="font-size: 0.75rem;">Estudiante <span style="color: var(--muted);">(Ref)</span></label>
+                    <input type="text" id="edit_reg_student" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="field">
+                    <label class="field-label" style="font-size: 0.75rem;">Curso <span style="color: var(--muted);">(Ref)</span></label>
+                    <input type="text" id="edit_reg_course" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="field">
+                    <label class="field-label" style="font-size: 0.75rem;">Profesor <span style="color: var(--muted);">(Ref)</span></label>
+                    <input type="text" id="edit_reg_teacher" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="field">
+                    <label class="field-label" style="font-size: 0.75rem;">Horario <span style="color: var(--muted);">(Ref)</span></label>
+                    <input type="text" id="edit_reg_schedule" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Semestre</label>
+                    <input type="text" id="edit_reg_semester" name="semester" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Nota Final</label>
+                    <input type="number" step="0.1" min="0" max="20" id="edit_reg_note" name="final_note" class="field-input" placeholder="Ej. 15">
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Estado</label>
+                    <select id="edit_reg_status" name="status" class="field-input" style="background: var(--bg); color: var(--text);">
+                        <option value="Cursando">Cursando</option>
+                        <option value="Aprobado">Aprobado</option>
+                        <option value="Reprobado">Reprobado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="closeEditRegisterModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#3b82f6; border-color:#3b82f6;">Guardar Cambios</button>
             </div>
         </form>
     </div>

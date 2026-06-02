@@ -61,8 +61,8 @@
                     <label class="field-label">Estado de Matrícula</label>
                     <select name="registration_status" class="field-input" style="background: var(--bg); color: var(--text);">
                         <option value="Matriculado">Matriculado</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Retirado">Retirado</option>
+                        <option value="Inactivo">Inactivo</option>
+
                     </select>
                 </div>
             </div>
@@ -142,7 +142,22 @@
                             {{ $student->created_at ? $student->created_at->format('d/m/Y') : '--' }}
                         </td>
                         <td style="text-align:right; white-space: nowrap;">
-                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
+                        <button 
+                            type="button" 
+                            class="btn btn-line btn-sm" 
+                            style="color:#3b82f6;border-color:rgba(59,130,246,.3);margin-right:.4rem;"
+                            data-id="{{ $student->id }}"
+                            data-fname="{{ $student->first_name }}"
+                            data-lname="{{ $student->last_name }}"
+                            data-dni="{{ $student->DNI }}"
+                            data-birth="{{ $student->birth_date }}"
+                            data-phone="{{ $student->phone }}"
+                            data-email="{{ $student->email }}"
+                            data-address="{{ $student->address }}"
+                            data-status="{{ $student->registration_status }}"
+                            onclick="openEditStudentModal(this, 'students')">
+                            Editar
+                        </button>
                             <button type="button" onclick="openModal({{ $student->id }}, 'students')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                         </td>
                     </tr>
@@ -176,4 +191,70 @@
         </form>
     </div>
 </div>
+
+<div id="editModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 600px; width: 90%;">
+        <div class="modal-icon" style="color: #3b82f6;">✏️</div>
+        <h3 style="color: #3b82f6;">Editar Estudiante</h3>
+        
+        <form id="editForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Nombres</label>
+                    <input type="text" id="edit_fname" name="first_name" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Apellidos</label>
+                    <input type="text" id="edit_lname" name="last_name" class="field-input" required>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">DNI <span style="font-size: 0.7rem; color: var(--muted);">(No editable)</span></label>
+                    <input type="text" id="edit_dni" name="DNI" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Fecha Nacimiento <span style="font-size: 0.7rem; color: var(--muted);">(No editable)</span></label>
+                    <input type="date" id="edit_birth" name="birth_date" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Teléfono</label>
+                    <input type="text" id="edit_phone" name="phone" class="field-input">
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Estado</label>
+                    <select id="edit_status" name="registration_status" class="field-input" style="background: var(--bg); color: var(--text);">
+                        <option value="Matriculado">Matriculado</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; text-align: left;">
+                <div class="field" style="margin-bottom: 1rem;">
+                    <label class="field-label">Correo Electrónico</label>
+                    <input type="email" id="edit_email" name="email" class="field-input" required>
+                </div>
+                <div class="field">
+                    <label class="field-label">Dirección</label>
+                    <input type="text" id="edit_address" name="address" class="field-input">
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="closeEditStudentModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#3b82f6; border-color:#3b82f6;">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
+
