@@ -23,14 +23,22 @@
                 <label class="field-label">Nombre del Curso</label>
                 <input type="text" name="name_course" class="field-input" placeholder="Ej. Algorítmica y Estructura de Datos" required>
             </div>
+            
             <div class="field" style="margin-bottom: 1rem;">
                 <label class="field-label">Código / SKU</label>
                 <input type="text" name="sku" class="field-input" placeholder="Ej. INF-102" required>
             </div>
-            <div class="field" style="margin-bottom: 1.5rem;">
+            
+            <div class="field" style="margin-bottom: 1rem;">
                 <label class="field-label">Créditos</label>
                 <input type="number" name="credits" class="field-input" min="1" placeholder="Ej. 4" required>
             </div>
+
+            <div class="field" style="margin-bottom: 1.5rem;">
+                <label class="field-label">Descripción del Curso</label>
+                <textarea name="description" class="field-input" rows="3" placeholder="Ej. Curso introductorio sobre estructuras de datos..."></textarea>
+            </div>
+
             <button type="submit" class="btn btn-fill">Guardar Curso</button>
         </form>
     </div>
@@ -59,6 +67,7 @@
                     <th>Código/SKU</th>
                     <th>Nombre del Curso</th>
                     <th>Créditos</th>
+                    <th>Descripción</th>
                     <th>F. Creación</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
@@ -70,15 +79,17 @@
                     <td><span class="badge">{{ $curso->sku }}</span></td>
                     <td style="font-weight:600;color:var(--text);">{{ $curso->name_course }}</td>
                     <td>{{ $curso->credits }} créditos</td>
+                    <td>{{ $curso->description ? Str::limit($curso->description, 60) : '--' }}</td>
                     <td style="color:var(--muted);font-size:.85rem;">{{ $curso->created_at ? $curso->created_at->format('d/m/Y') : '--' }}</td>
                     <td style="text-align:right;">
                         <a href="{{ route('courses.edit', $curso->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
-                        <button type="button" onclick=\"openModal({{ $curso->id }}, 'courses')\" class=\"btn btn-line btn-sm\" style=\"color:#f87171;border-color:rgba(248,113,113,.3);\">Eliminar</button>
+                        
+                        <button type="button" onclick="openModal({{ $curso->id }}, 'courses')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" style="text-align:center;padding:3rem;color:var(--muted);">
+                    <td colspan="7" style="text-align:center;padding:3rem;color:var(--muted);">
                         <div style="font-size:2rem;margin-bottom:.8rem;">📚</div>
                         No hay cursos registrados en el sistema.
                     </td>
@@ -95,11 +106,12 @@
         <div class="modal-icon">⚠️</div>
         <h3>¿Eliminar curso?</h3>
         <p>Esta acción no se puede deshacer. ¿Estás seguro de continuar?</p>
-        <form id=\"deleteForm\" method=\"POST\" style=\"display:inline;\">
-            @csrf @method('DELETE')
-            <div class=\"modal-actions\">
-                <button type=\"button\" onclick=\"closeModal()\" class=\"btn btn-ghost\">Cancelar</button>
-                <button type=\"submit\" class=\"btn btn-line\" style=\"color:#f87171; border-color:#f87171;\">Sí, eliminar</button>
+        <form id="deleteForm" method="POST" style="display:inline;">
+            @csrf 
+            @method('DELETE')
+            <div class="modal-actions">
+                <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#f87171; border-color:#f87171;">Sí, eliminar</button>
             </div>
         </form>
     </div>

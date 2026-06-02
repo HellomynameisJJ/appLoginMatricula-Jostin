@@ -82,6 +82,7 @@
                     <th>Día</th>
                     <th>Horario</th>
                     <th>Aula</th>
+                    <th>F. Creación</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
@@ -93,6 +94,9 @@
                     <td><span class="badge">{{ $horario->day_of_week }}</span></td>
                     <td style="color:var(--accent); font-weight:600;">{{ $horario->start_time }} - {{ $horario->end_time }}</td>
                     <td><span style="color:var(--muted);">🚪 {{ $horario->classroom_nro }}</span></td>
+                    <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
+                        {{ $horario->created_at ? $horario->created_at->format('d/m/Y') : '--' }}
+                    </td>
                     <td style="text-align:right;">
                         <a href="{{ route('schedules.edit', $horario->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
                         <button type="button" onclick="openModal({{ $horario->id }}, 'schedules')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
