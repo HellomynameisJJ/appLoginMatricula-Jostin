@@ -193,13 +193,8 @@
             <a href="{{ route('schedules.index') }}" class="sb-link {{ request()->is('schedules*') ? 'active' : '' }}">
                 <div class="sb-ico">🗓️</div> Horarios
             </a>
-
-            <div class="sb-section" style="margin-top:.8rem;">Acciones</div>
-            <a href="{{ route('registers.create') }}" class="sb-link">
-                <div class="sb-ico">✦</div> Nueva Matrícula
-                <span class="sb-badge">Nuevo</span>
-            </a>
         </div>
+
 
         <div class="sb-footer">
             <div class="sb-user">

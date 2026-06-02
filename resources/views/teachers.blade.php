@@ -8,38 +8,7 @@
 
 @section('content')
 {{-- ── ESTILOS PARA ESTIRAR TODA LA PANTALLA Y VER LOS DATOS ABAJO ── --}}
-<style>
-    /* Forzamos a que el contenedor principal de la página pueda estirarse a la derecha */
-    .admin-container {
-        max-width: none !important;
-        width: max-content !important;
-        min-width: 100% !important;
-        padding-right: 4rem !important; /* Espacio de holgura al final */
-    }
 
-    /* La tarjeta de la tabla ya NO tiene scroll interno, se adapta al ancho total */
-    .table-card {
-        overflow: visible !important;
-        width: 100% !important;
-    }
-
-    /* Aseguramos un ancho fijo y cómodo para la tabla de profesores */
-    .data-table {
-        width: 1000px !important;
-        table-layout: fixed !important;
-    }
-
-    /* Configuración exacta de los anchos por columna según tu modelo */
-    .data-table th:nth-child(1) { width: 80px; }  /* ID */
-    .data-table th:nth-child(2) { width: 300px; } /* Profesor (Nombre completo) */
-    .data-table th:nth-child(3) { width: 250px; } /* Especialidad */
-    .data-table th:nth-child(4) { width: 150px; } /* Acciones */
-
-    /* Forzar que la barra de desplazamiento inferior de la pantalla se active correctamente */
-    body {
-        overflow-x: auto !important;
-    }
-</style>
 
 <div class="admin-container">
 
@@ -102,6 +71,7 @@
                     <th>ID</th>
                     <th>Profesor</th>
                     <th>Especialidad</th>
+                    <th>F. Inscripción</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
@@ -126,6 +96,9 @@
                             {{ $teacher->specialty ?? 'Sin especialidad' }}
                         </span>
                     </td>
+                    <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
+                            {{ $teacher->created_at ? $teacher->created_at->format('d/m/Y') : '--' }}
+                    </td>
                     <td style="text-align:right; white-space: nowrap;">
                         <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
                         <button type="button" onclick="openModal({{ $teacher->id }}, 'teachers')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
@@ -133,7 +106,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" style="text-align:center;padding:3rem;color:var(--muted);">
+                    <td colspan="5" style="text-align:center;padding:3rem;color:var(--muted);">
                         <div style="font-size:2rem;margin-bottom:.8rem;">🧑‍🏫</div>
                         No hay profesores registrados en el sistema.
                     </td>
