@@ -207,3 +207,148 @@ window.closeModal = function() {
         deleteModal.style.display = 'none';
     }
 };
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN (Estudiantes)
+══════════════════════════════════════ */
+window.openEditModal = function(btn, routeName) {
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    
+    if (editModal && editForm) {
+        // 1. Configuramos la URL para actualizar (Ej: /students/5)
+        editForm.action = `/${routeName}/${btn.dataset.id}`;
+        
+        // 2. Rellenamos los campos del formulario con los datos del botón
+        document.getElementById('edit_fname').value = btn.dataset.fname || '';
+        document.getElementById('edit_lname').value = btn.dataset.lname || '';
+        document.getElementById('edit_dni').value = btn.dataset.dni || '';
+        document.getElementById('edit_birth').value = btn.dataset.birth || '';
+        document.getElementById('edit_phone').value = btn.dataset.phone || '';
+        document.getElementById('edit_email').value = btn.dataset.email || '';
+        document.getElementById('edit_address').value = btn.dataset.address || '';
+        document.getElementById('edit_status').value = btn.dataset.status || 'Matriculado';
+        
+        // 3. Mostramos el modal
+        editModal.style.display = 'flex';
+    }
+};
+
+window.closeEditModal = function() {
+    const editModal = document.getElementById('editModal');
+    if (editModal) editModal.style.display = 'none';
+};
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN DE CURSOS
+══════════════════════════════════════ */
+window.openEditCourseModal = function(btn) {
+    const modal = document.getElementById('editCourseModal');
+    const form = document.getElementById('editCourseForm');
+    
+    if (modal && form) {
+        // Enrutamos el formulario hacia /courses/{id}
+        form.action = `/courses/${btn.dataset.id}`;
+        
+        // Rellenamos los inputs
+        document.getElementById('edit_course_name').value = btn.dataset.name || '';
+        document.getElementById('edit_course_sku').value = btn.dataset.sku || '';
+        document.getElementById('edit_course_credits').value = btn.dataset.credits || '';
+        document.getElementById('edit_course_desc').value = btn.dataset.desc || '';
+        
+        // Abrimos el modal
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeEditCourseModal = function() {
+    const modal = document.getElementById('editCourseModal');
+    if (modal) modal.style.display = 'none';
+};
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN DE PROFESORES
+══════════════════════════════════════ */
+window.openEditTeacherModal = function(btn) {
+    const modal = document.getElementById('editTeacherModal');
+    const form = document.getElementById('editTeacherForm');
+    
+    if (modal && form) {
+        // Enrutamos el formulario hacia la ruta de actualización
+        form.action = `/teachers/${btn.dataset.id}`;
+        
+        // Rellenamos los 3 inputs del profesor
+        document.getElementById('edit_teacher_fname').value = btn.dataset.fname || '';
+        document.getElementById('edit_teacher_lname').value = btn.dataset.lname || '';
+        document.getElementById('edit_teacher_specialty').value = btn.dataset.specialty || '';
+        
+        // Mostramos el modal
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeEditTeacherModal = function() {
+    const modal = document.getElementById('editTeacherModal');
+    if (modal) modal.style.display = 'none';
+};
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN DE MATRICULAS
+══════════════════════════════════════ */
+
+window.openEditRegisterModal = function(btn) {
+    const modal = document.getElementById('editRegisterModal');
+    const form = document.getElementById('editRegisterForm');
+    
+    if (modal && form) {
+        form.action = `/registers/${btn.dataset.id}`;
+
+        document.getElementById('edit_reg_student').value = btn.dataset.student || '';
+        document.getElementById('edit_reg_course').value = btn.dataset.course || '';
+        document.getElementById('edit_reg_teacher').value = btn.dataset.teacher || '';
+        document.getElementById('edit_reg_schedule').value = btn.dataset.schedule || '';
+        document.getElementById("edit_reg_semester").value = btn.dataset.semester || '';
+        document.getElementById("edit_reg_note").value = btn.dataset.note || '';
+        document.getElementById('edit_reg_status').value = btn.dataset.status || 'Matriculado';
+        
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeEditRegisterModal = function() {
+    const modal = document.getElementById('editRegisterModal');
+    if (modal) modal.style.display = 'none';
+};
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN DE HORARIOS
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   MODAL EDICIÓN DE HORARIOS
+══════════════════════════════════════ */
+window.openEditScheduleModal = function(btn) {
+    const modal = document.getElementById('editScheduleModal');
+    const form = document.getElementById('editScheduleForm');
+    
+    if (modal && form) {
+        // Enrutamos hacia /schedules/{id}
+        form.action = `/schedules/${btn.dataset.id}`;
+        
+        // Referencia bloqueada (Curso)
+        document.getElementById('edit_sched_course').value = btn.dataset.name || 'Curso no asignado';
+        
+        // Datos editables (Usando tus abreviaturas exactas: dow, st, et, cn)
+        document.getElementById('edit_sched_dow').value = btn.dataset.dow || '';
+        document.getElementById('edit_sched_st').value = btn.dataset.st || '';
+        document.getElementById('edit_sched_et').value = btn.dataset.et || '';
+        document.getElementById('edit_sched_cn').value = btn.dataset.cn || '';
+        
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeEditScheduleModal = function() {
+    const modal = document.getElementById('editScheduleModal');
+    if (modal) modal.style.display = 'none';
+};

@@ -41,12 +41,6 @@ class TeachersController extends Controller
         return new TeachersResource($teacher);
     }
 
-    public function edit(string $id)
-    {
-        $teacher = Teacher::findOrFail($id);
-        return view('teachers_edit', compact('teacher'));
-    }
-
     public function update(Request $request, string $id)
     {
         $teacher = Teacher::findOrFail($id);

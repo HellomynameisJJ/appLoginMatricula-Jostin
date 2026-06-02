@@ -52,22 +52,10 @@ class RegistersController extends Controller
         return redirect()->route('registers.index')->with('success', 'Matrícula registrada correctamente.');
     }
 
-    
-
     public function show(string $id)
     {
         $register = Register::findOrFail($id);
         return new RegistersResource($register);
-    }
-
-    public function edit(string $id)
-    {
-        $register  = Register::findOrFail($id);
-        $students  = Student::all();
-        $courses   = Course::all();
-        $teachers  = Teacher::all();
-        $schedules = Schedule::all();
-        return view('registers_edit', compact('register', 'students', 'courses', 'teachers', 'schedules'));
     }
 
     public function update(Request $request, string $id)

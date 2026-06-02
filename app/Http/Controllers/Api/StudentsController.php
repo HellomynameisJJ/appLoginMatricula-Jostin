@@ -47,12 +47,6 @@ class StudentsController extends Controller
         return new StudentsResource($student);
     }
 
-    public function edit(string $id)
-    {
-        $student = Student::findOrFail($id);
-        return view('students_edit', compact('student'));
-    }
-
     public function update(Request $request, string $id)
     {
         $student = Student::findOrFail($id);

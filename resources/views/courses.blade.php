@@ -82,8 +82,18 @@
                     <td>{{ $curso->description ? Str::limit($curso->description, 60) : '--' }}</td>
                     <td style="color:var(--muted);font-size:.85rem;">{{ $curso->created_at ? $curso->created_at->format('d/m/Y') : '--' }}</td>
                     <td style="text-align:right;">
-                        <a href="{{ route('courses.edit', $curso->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
-                        
+                    <button type="button" 
+                        class="btn btn-line btn-sm" 
+                        style="color:#3b82f6;border-color:rgba(59,130,246,.3);margin-right:.4rem;"
+                        data-id="{{ $curso->id }}"
+                        data-name="{{ $curso->name_course }}"
+                        data-sku="{{ $curso->sku }}"
+                        data-credits="{{ $curso->credits }}"
+                        data-desc="{{ $curso->description }}"
+                        onclick="openEditCourseModal(this)">
+                        Editar
+                    </button>
+                    
                         <button type="button" onclick="openModal({{ $curso->id }}, 'courses')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
@@ -112,6 +122,45 @@
             <div class="modal-actions">
                 <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
                 <button type="submit" class="btn btn-line" style="color:#f87171; border-color:#f87171;">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editCourseModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 600px; width: 90%;">
+        <div class="modal-icon" style="color: #3b82f6;">✏️</div>
+        <h3 style="color: #3b82f6;">Editar Curso</h3>
+        
+        <form id="editCourseForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Nombre del Curso</label>
+                    <input type="text" id="edit_course_name" name="name_course" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">SKU <span style="font-size: 0.7rem; color: var(--muted);">(No editable)</span></label>
+                    <input type="text" id="edit_course_sku" name="sku" class="field-input" readonly style="opacity: 0.5; cursor: not-allowed; background: rgba(0,0,0,0.2);">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                <div class="field" style="flex: 0.5;">
+                    <label class="field-label">Créditos</label>
+                    <input type="number" id="edit_course_credits" name="credits" class="field-input" min="1" required>
+                </div>
+                <div class="field" style="flex: 1.5;">
+                    <label class="field-label">Descripción del Curso</label>
+                    <textarea id="edit_course_desc" name="description" class="field-input" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="closeEditCourseModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#3b82f6; border-color:#3b82f6;">Guardar Cambios</button>
             </div>
         </form>
     </div>

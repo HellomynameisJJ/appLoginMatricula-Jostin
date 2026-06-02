@@ -44,13 +44,6 @@ class SchedulesController extends Controller
         return new SchedulesResource($schedule);
     }
 
-    public function edit(string $id)
-    {
-        $schedule = Schedule::findOrFail($id);
-        $courses  = Course::all();
-        return view('schedules_edit', compact('schedule', 'courses'));
-    }
-
     public function update(Request $request, string $id)
     {
         $schedule = Schedule::findOrFail($id);

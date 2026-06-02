@@ -100,7 +100,17 @@
                             {{ $teacher->created_at ? $teacher->created_at->format('d/m/Y') : '--' }}
                     </td>
                     <td style="text-align:right; white-space: nowrap;">
-                        <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-line btn-sm" style="color:#3b82f6;border-color:rgba(59,130,246,.3);text-decoration:none;margin-right:.4rem;">Editar</a>
+                        <button 
+                            type="button" 
+                            class="btn btn-line btn-sm" 
+                            style="color:#3b82f6;border-color:rgba(59,130,246,.3);margin-right:.4rem;"
+                            data-id="{{ $teacher->id }}"
+                            data-fname="{{ $teacher->first_name }}"
+                            data-lname="{{ $teacher->last_name }}"
+                            data-specialty="{{ $teacher->specialty }}"
+                            onclick="openEditTeacherModal(this, 'teachers')">
+                            Editar
+                        </button>
                         <button type="button" onclick="openModal({{ $teacher->id }}, 'teachers')" class="btn btn-line btn-sm" style="color:#f87171;border-color:rgba(248,113,113,.3);">Eliminar</button>
                     </td>
                 </tr>
@@ -128,6 +138,38 @@
             <div class="modal-actions">
                 <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancelar</button>
                 <button type="submit" class="btn btn-line" style="color:#f87171;border-color:#f87171;">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editTeacherModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 600px; width: 90%;">
+        <div class="modal-icon" style="color: #3b82f6;">✏️</div>
+        <h3 style="color: #3b82f6;">Editar Profesor</h3>
+        
+        <form id="editTeacherForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Nombres</label>
+                    <input type="text" id="edit_teacher_fname" name="first_name" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Apellidos</label>
+                    <input type="text" id="edit_teacher_lname" name="last_name" class="field-input" required>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <label class="field-label">Especialidad</label>
+                    <input type="text" id="edit_teacher_specialty" name="specialty" class="field-input" required>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="closeEditTeacherModal()" class="btn btn-ghost">Cancelar</button>
+                <button type="submit" class="btn btn-line" style="color:#3b82f6; border-color:#3b82f6;">Guardar Cambios</button>
             </div>
         </form>
     </div>
