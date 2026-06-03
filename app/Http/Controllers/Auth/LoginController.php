@@ -108,49 +108,12 @@ class LoginController extends Controller
     }
 
     // =========================================================================
-    // OAUTH: FACEBOOK
-    // =========================================================================
-
-    public function redirectToFacebook()
-    {
-        return Socialite::driver('facebook')->with(['prompt' => 'select_account'])->redirect();
-    }
-
-    public function handleFacebookCallBack(Request $request)
-    {
-        if ($request->has('error') || $request->has('error_code')) {
-            return redirect('/login')->with('error', 'El inicio de sesión con Facebook fue cancelado.');
-        }
-
-        try {
-            $facebookUser = Socialite::driver('facebook')->user();
-
-            $email = $facebookUser->getEmail() ?? ($facebookUser->getId() . '@facebook.com');
-
-            $user = User::updateOrCreate(
-                ['email' => $email],
-                [
-                    'name'        => $facebookUser->getName() ?? 'Usuario Facebook',
-                    'facebook_id' => $facebookUser->getId(),
-                    'password'    => bcrypt(uniqid()),
-                ]
-            );
-
-            Auth::login($user, true);
-            return redirect($this->redirectTo);
-
-        } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Error con Facebook: ' . $e->getMessage());
-        }
-    }
-
-    // =========================================================================
     // OAUTH: BITBUCKET
     // =========================================================================
 
     public function redirectToBitbucket()
     {
-        return Socialite::driver('bitbucket')->with(['prompt' => 'select_account'])->redirect();
+        return Socialite::driver('bitbucket')->with(['prompt' => 'consent'])->redirect();
     }
 
     public function handleBitbucketCallBack(Request $request)
