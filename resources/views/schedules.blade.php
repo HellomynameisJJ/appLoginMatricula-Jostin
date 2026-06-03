@@ -83,6 +83,7 @@
                     <th>Horario</th>
                     <th>Aula</th>
                     <th>F. Creación</th>
+                    <th>F. Actualización</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
@@ -96,6 +97,9 @@
                     <td><span style="color:var(--muted);">🚪 {{ $horario->classroom_nro }}</span></td>
                     <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
                         {{ $horario->created_at ? $horario->created_at->format('d/m/Y') : '--' }}
+                    </td>
+                    <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
+                        {{ $horario->updated_at ? $horario->updated_at->format('d/m/Y') : '--' }}
                     </td>
                     <td style="text-align:right;">
                         <button type="button" 

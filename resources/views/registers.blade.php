@@ -129,6 +129,7 @@
                         <th>Horario</th>
                         <th>Semestre</th>
                         <th>F. Matrícula</th>
+                        <th>F. Actualización</th>
                         <th>Estado</th>
                         <th>Nota Final</th>
                         <th style="text-align:right;">Acciones</th>
@@ -168,7 +169,7 @@
                         </td>
                         
                         <td style="color:var(--muted);font-size:.85rem; white-space: nowrap;">{{ $registro->registration_date }}</td>
-                        
+                        <td style="color:var(--muted);font-size:.85rem; white-space: nowrap;">{{ $registro->updated_at ? $registro->updated_at->format('d/m/Y') : '--' }}</td>
                         <td style="white-space: nowrap;">
                             <span class="badge" style="background: rgba(167,139,250,.09); color: var(--accent);">
                                 {{ $registro->status }}
