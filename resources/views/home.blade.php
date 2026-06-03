@@ -147,6 +147,30 @@
 
         @media(max-width:1024px){ .dash-bento { grid-template-columns:1fr; } .qstats { grid-template-columns:repeat(2,1fr); } .db-card.hero-card { grid-row:auto; } }
         @media(max-width:600px){ .qstats { grid-template-columns:1fr 1fr; } }
+
+        /* ── SCROLLBAR PREMIUM (GLOBAL) ── */
+        /* Para navegadores WebKit (Chrome, Edge, Brave, Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;  /* Grosor para scroll vertical */
+            height: 8px; /* Grosor para scroll horizontal */
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02); /* Fondo oscuro súper sutil */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.25); /* Tu morado en versión translúcida */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(167, 139, 250, 0.5); /* Se ilumina cuando pasas el mouse */
+        }
+
+        /* Para Firefox (Usa una sintaxis distinta) */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(167, 139, 250, 0.25) transparent;
+        }
     </style>
 </head>
 <body>

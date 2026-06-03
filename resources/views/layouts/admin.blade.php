@@ -64,6 +64,8 @@
         .main-content {
             margin-left:240px; flex:1;
             min-height:100vh; position:relative; z-index:1;
+            /* Esta línea evita que el diseño empuje la pantalla hacia la derecha */
+            min-width: 0; 
         }
 
         /* ── TOP NAV (dentro del main) ── */
@@ -107,7 +109,11 @@
         .page-hero-text p { font-size:.8rem; color:rgba(255,255,255,.5); margin-top:.25rem; }
 
         /* ── CONTENT AREA ── */
-        .content-area { padding:2rem; }
+        .content-area { 
+            padding:2rem; 
+            max-width: 100%;
+            box-sizing: border-box;
+        }
 
         /* ── TOOLBAR PREMIUM ── */
         .prem-toolbar {
@@ -152,6 +158,31 @@
         .modal-actions { display:flex; gap:.7rem; justify-content:center; }
 
         @media(max-width:900px){ .sidebar{display:none;} .main-content{margin-left:0;} }
+
+        /* ── SCROLLBAR PREMIUM (GLOBAL) ── */
+        /* Para navegadores WebKit (Chrome, Edge, Brave, Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;  /* Grosor para scroll vertical */
+            height: 8px; /* Grosor para scroll horizontal */
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02); /* Fondo oscuro súper sutil */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.25); /* Tu morado en versión translúcida */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(167, 139, 250, 0.5); /* Se ilumina cuando pasas el mouse */
+        }
+
+        /* Para Firefox (Usa una sintaxis distinta) */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(167, 139, 250, 0.25) transparent;
+        }
+        
     </style>
 </head>
 <body>
@@ -174,7 +205,7 @@
         <div style="padding:.8rem .5rem; flex:1;">
             <div class="sb-section">Principal</div>
             <a href="{{ url('/home') }}" class="sb-link {{ request()->is('home') ? 'active' : '' }}">
-                <div class="sb-ico">🏠</div> Dashboard
+                <div class="sb-ico">🏠</div> Inicio
             </a>
 
             <div class="sb-section" style="margin-top:.8rem;">Gestión</div>
