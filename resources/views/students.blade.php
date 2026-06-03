@@ -103,6 +103,7 @@
                         <th>Teléfono</th>
                         <th>Estado</th>
                         <th>F. Inscripción</th>
+                        <th>F. Actualización</th>
                         <th style="text-align:right;">Acciones</th>
                     </tr>
                 </thead>
@@ -140,6 +141,9 @@
                         </td>
                         <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
                             {{ $student->created_at ? $student->created_at->format('d/m/Y') : '--' }}
+                        </td>
+                        <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
+                            {{ $student->updated_at ? $student->updated_at->format('d/m/Y') : '--' }}
                         </td>
                         <td style="text-align:right; white-space: nowrap;">
                         <button 

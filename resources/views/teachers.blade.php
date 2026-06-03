@@ -72,6 +72,7 @@
                     <th>Profesor</th>
                     <th>Especialidad</th>
                     <th>F. Inscripción</th>
+                    <th>F. Actualización</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
@@ -98,6 +99,9 @@
                     </td>
                     <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
                             {{ $teacher->created_at ? $teacher->created_at->format('d/m/Y') : '--' }}
+                    </td>
+                    <td style="color:var(--muted); font-size:.85rem; white-space: nowrap;">
+                            {{ $teacher->updated_at ? $teacher->updated_at->format('d/m/Y') : '--' }}
                     </td>
                     <td style="text-align:right; white-space: nowrap;">
                         <button 

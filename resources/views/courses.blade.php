@@ -69,6 +69,7 @@
                     <th>Créditos</th>
                     <th>Descripción</th>
                     <th>F. Creación</th>
+                    <th>F. Actualización</th>
                     <th style="text-align:right;">Acciones</th>
                 </tr>
             </thead>
@@ -81,6 +82,7 @@
                     <td>{{ $curso->credits }} créditos</td>
                     <td>{{ $curso->description ? Str::limit($curso->description, 60) : '--' }}</td>
                     <td style="color:var(--muted);font-size:.85rem;">{{ $curso->created_at ? $curso->created_at->format('d/m/Y') : '--' }}</td>
+                    <td style="color:var(--muted);font-size:.85rem;">{{ $curso->updated_at ? $curso->updated_at->format('d/m/Y') : '--' }}</td>
                     <td style="text-align:right;">
                     <button type="button" 
                         class="btn btn-line btn-sm" 
