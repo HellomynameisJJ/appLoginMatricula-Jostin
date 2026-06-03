@@ -15,7 +15,7 @@ COPY . .
 
 # 4. Instalar dependencias de Laravel y el diseño
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 # 5. Dar permisos de seguridad
