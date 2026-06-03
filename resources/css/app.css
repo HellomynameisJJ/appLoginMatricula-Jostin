@@ -521,3 +521,24 @@ body::before {
 }
 .modal-content h3 { color: white; margin-bottom: 1rem; }
 .modal-content p { color: #9ca3af; margin-bottom: 2rem; }
+
+/* ── SCROLLBAR PREMIUM (PANTALLAS PÚBLICAS) ── */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.25);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(167, 139, 250, 0.5);
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(167, 139, 250, 0.25) transparent;
+        }

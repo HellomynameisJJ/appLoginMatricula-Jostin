@@ -10,7 +10,7 @@
 
 <div class="admin-container" style="max-width:100%;padding:0;">
     
-    {{-- FORMULARIO DINÁMICO DE REGISTRO --}}
+    {{-- FORMULARIO DINÁMICO DE REGISTRO CON MAGIA JS --}}
     @if(request()->routeIs('registers.create'))
     <div class="table-card" style="padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(167,139,250,.2); max-width: 100%;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -21,20 +21,30 @@
         <form method="POST" action="{{ route('registers.store') }}">
             @csrf
             
-            {{-- Fila 1: Estudiante, Curso y Profesor --}}
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-                <div class="field" style="flex: 1; min-width: 250px;">
-                    <label class="field-label">Estudiante</label>
-                    <select name="student_id" class="field-input" style="background: var(--bg); color: var(--text);" required>
-                        <option value="">-- Seleccione Alumno --</option>
+            {{-- SECCIÓN MAGIA: DNI y Alumno --}}
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: rgba(167,139,250,0.05); border-radius: 8px;">
+                <div class="field" style="flex: 0.5; min-width: 150px;">
+                    <label class="field-label" style="color: var(--accent);">🔍 Buscar DNI</label>
+                    <input type="text" id="search_dni" class="field-input" placeholder="Escribe el DNI..." oninput="autoSelectStudent()">
+                </div>
+                <div class="field" style="flex: 1.5; min-width: 250px;">
+                    <label class="field-label">Estudiante Encontrado</label>
+                    <select name="student_id" id="auto_student_select" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                        <option value="">-- Esperando selección --</option>
                         @foreach($students ?? [] as $student)
-                            <option value="{{ $student->id }}">{{ $student->first_name }} {{ $student->last_name }}</option>
+                            <option value="{{ $student->id }}" data-dni="{{ $student->DNI }}">
+                                {{ $student->DNI }} - {{ $student->first_name }} {{ $student->last_name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
+            </div>
+
+            {{-- Fila 1: Curso y Profesor --}}
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
                 <div class="field" style="flex: 1; min-width: 250px;">
                     <label class="field-label">Curso</label>
-                    <select name="course_id" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                    <select name="course_id" id="dynamic_course" class="field-input" style="background: var(--bg); color: var(--text);" onchange="filterSchedules()" required>
                         <option value="">-- Seleccione Curso --</option>
                         @foreach($courses ?? [] as $course)
                             <option value="{{ $course->id }}">{{ $course->name_course }}</option>
@@ -42,11 +52,11 @@
                     </select>
                 </div>
                 <div class="field" style="flex: 1; min-width: 250px;">
-                    <label class="field-label">Profesor</label>
+                    <label class="field-label">Profesor Asignado</label>
                     <select name="teacher_id" class="field-input" style="background: var(--bg); color: var(--text);" required>
                         <option value="">-- Seleccione Docente --</option>
                         @foreach($teachers ?? [] as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                            <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }} ({{ $teacher->specialty }})</option>
                         @endforeach
                     </select>
                 </div>
@@ -55,11 +65,13 @@
             {{-- Fila 2: Horario, Semestre, Fecha y Estado --}}
             <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
                 <div class="field" style="flex: 1; min-width: 200px;">
-                    <label class="field-label">Horario Asignado</label>
-                    <select name="schedule_id" class="field-input" style="background: var(--bg); color: var(--text);" required>
-                        <option value="">-- Seleccione Horario --</option>
+                    <label class="field-label">Horario Disponible</label>
+                    <select name="schedule_id" id="dynamic_schedule" class="field-input" style="background: var(--bg); color: var(--text);" required>
+                        <option value="">-- Primero seleccione un curso --</option>
                         @foreach($schedules ?? [] as $schedule)
-                            <option value="{{ $schedule->id }}">{{ $schedule->day_of_week ?? 'Sin día' }} - {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}</option>
+                            <option value="{{ $schedule->id }}" data-course="{{ $schedule->course_id }}">
+                                {{ $schedule->day_of_week ?? 'Sin día' }} - {{ $schedule->start_time ? \Carbon\Carbon::parse($schedule->start_time)->format('H:i') : '' }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -87,7 +99,7 @@
         </form>
     </div>
     @endif
-
+    
     <div class="prem-toolbar observe">
         <div class="prem-toolbar-left">
             <div>

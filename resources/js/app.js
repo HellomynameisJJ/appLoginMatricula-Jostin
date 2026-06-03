@@ -323,10 +323,6 @@ window.closeEditRegisterModal = function() {
 /* ══════════════════════════════════════
    MODAL EDICIÓN DE HORARIOS
 ══════════════════════════════════════ */
-
-/* ══════════════════════════════════════
-   MODAL EDICIÓN DE HORARIOS
-══════════════════════════════════════ */
 window.openEditScheduleModal = function(btn) {
     const modal = document.getElementById('editScheduleModal');
     const form = document.getElementById('editScheduleForm');
@@ -352,3 +348,61 @@ window.closeEditScheduleModal = function() {
     const modal = document.getElementById('editScheduleModal');
     if (modal) modal.style.display = 'none';
 };
+
+/* ══════════════════════════════════════
+   LOGICA DE LA BUSQUEDA DE ESTUDIANTE Y FILTRADO DE HORARIOS EN LA CREACIÓN DE MATRICULAS
+══════════════════════════════════════ */
+// 1. Magia del DNI (Hecha pública con window.)
+window.autoSelectStudent = function() {
+    let inputDni = document.getElementById('search_dni').value.trim();
+    let studentSelect = document.getElementById('auto_student_select');
+    
+    // Verificamos que el select exista en la página actual
+    if (!studentSelect) return;
+    
+    for(let i = 0; i < studentSelect.options.length; i++) {
+        let option = studentSelect.options[i];
+        if(option.dataset.dni === inputDni) {
+            studentSelect.selectedIndex = i;
+            studentSelect.style.borderColor = "#10b981"; // Borde verde de éxito
+            return;
+        }
+    }
+    studentSelect.style.borderColor = "rgba(167,139,250,.2)"; // Borde normal
+};
+
+// 2. Magia del Curso (Hecha pública con window.)
+window.filterSchedules = function() {
+    let courseSelect = document.getElementById('dynamic_course');
+    let scheduleSelect = document.getElementById('dynamic_schedule');
+    
+    if (!courseSelect || !scheduleSelect) return;
+
+    let selectedCourseId = courseSelect.value;
+    let options = scheduleSelect.options;
+
+    for (let i = 0; i < options.length; i++) {
+        let option = options[i];
+        
+        if (option.value === "") {
+            option.text = selectedCourseId ? "-- Seleccione un horario --" : "-- Primero seleccione un curso --";
+            continue;
+        }
+
+        if (option.dataset.course === selectedCourseId) {
+            option.hidden = false;
+            option.disabled = false;
+        } else {
+            option.hidden = true;
+            option.disabled = true;
+        }
+    }
+    scheduleSelect.value = "";
+};
+
+// Ejecutar el filtro al cargar la página (por si hay un curso preseleccionado)
+document.addEventListener("DOMContentLoaded", function() {
+    if(document.getElementById('dynamic_course')) {
+        window.filterSchedules();
+    }
+});
