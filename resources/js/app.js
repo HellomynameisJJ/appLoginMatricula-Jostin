@@ -211,7 +211,7 @@ window.closeModal = function() {
 /* ══════════════════════════════════════
    MODAL EDICIÓN (Estudiantes)
 ══════════════════════════════════════ */
-window.openEditModal = function(btn, routeName) {
+window.openEditStudentModal = function(btn, routeName) {
     const editModal = document.getElementById('editModal');
     const editForm = document.getElementById('editForm');
     
@@ -234,7 +234,7 @@ window.openEditModal = function(btn, routeName) {
     }
 };
 
-window.closeEditModal = function() {
+window.closeEditStudentModal = function() {
     const editModal = document.getElementById('editModal');
     if (editModal) editModal.style.display = 'none';
 };
